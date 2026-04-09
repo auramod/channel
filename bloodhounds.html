@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloodhounds - Drama Video Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #1a1a1a;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #ff6b00;
+        }
+        
+        .video-container {
+            background: #000;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+        
+        .episode-info {
+            background: #222;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+        
+        .episode-info h2 {
+            margin-bottom: 10px;
+            color: #ff6b00;
+        }
+        
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .episode-btn {
+            padding: 12px 20px;
+            background: #333;
+            border: 2px solid #555;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1em;
+        }
+        
+        .episode-btn:hover {
+            background: #ff6b00;
+            border-color: #ff6b00;
+            transform: translateY(-2px);
+        }
+        
+        .episode-btn.active {
+            background: #ff6b00;
+            border-color: #ff6b00;
+            box-shadow: 0 0 15px rgba(255, 107, 0, 0.5);
+        }
+        
+        .description {
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 BLOODHOUNDS</h1>
+            <p>K-Drama Series | Watch All Episodes</p>
+        </div>
+        
+        <div class="video-container">
+            <video class="video-player" id="videoPlayer" controls>
+                <source id="videoSource" src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="episode-info">
+            <h2>Episode <span id="episodeNumber">12</span>: <span id="episodeTitle">Loading...</span></h2>
+            <p><strong>Status:</strong> <span id="episodeStatus">Available</span></p>
+        </div>
+        
+        <div class="description">
+            <h3>Description</h3>
+            <p id="episodeDescription">Episode 12 description will be displayed here...</p>
+        </div>
+        
+        <h3 style="margin-top: 40px; margin-bottom: 20px;">Select Episode:</h3>
+        <div class="episodes-grid" id="episodesContainer"></div>
+    </div>
+    
+    <script>
+        const episodes = {
+            1: {
+                title: "Episode 1 - The Beginning",
+                description: "Gun-woo puts his mother's safety first; Hong Woo-jin turns to an old friend for help; but Baek-jeong's men soon catch up after tailing their every move.",
+                videoUrl: "https://hub.toxix.buzz/b48ae446c9303f78daad35a902ac7223?token=1775362562"
+            },
+            2: {
+                title: "Episode 2 - Secrets Unveiled",
+                description: "Hidden secrets start to surface as investigations deepen.",
+                videoUrl: "video2.mp4"
+            },
+            3: {
+                title: "Episode 3 - The Hunt",
+                description: "The search intensifies with new clues and suspects.",
+                videoUrl: "video3.mp4"
+            },
+            4: {
+                title: "Episode 4 - Betrayal",
+                description: "Trust is shattered as betrayal comes from an unexpected source.",
+                videoUrl: "video4.mp4"
+            },
+            5: {
+                title: "Episode 5 - Breakthrough",
+                description: "A major breakthrough brings new leads and complications.",
+                videoUrl: "video5.mp4"
+            },
+            6: {
+                title: "Episode 6 - The Trap",
+                description: "Our heroes fall into a dangerous trap set by the antagonist.",
+                videoUrl: "video6.mp4"
+            },
+            7: {
+                title: "Episode 7 - Escape",
+                description: "A daring escape attempt puts everything on the line.",
+                videoUrl: "video7.mp4"
+            },
+            8: {
+                title: "Episode 8 - Resurrection",
+                description: "Old ghosts from the past come back to haunt them.",
+                videoUrl: "video8.mp4"
+            },
+            9: {
+                title: "Episode 9 - The Truth",
+                description: "The truth behind everything is finally revealed.",
+                videoUrl: "video9.mp4"
+            },
+            10: {
+                title: "Episode 10 - All In",
+                description: "Everything comes to a head in this critical episode.",
+                videoUrl: "video10.mp4"
+            },
+            11: {
+                title: "Episode 11 - The Final Stand",
+                description: "The penultimate episode sets up the ultimate confrontation.",
+                videoUrl: "video11.mp4"
+            },
+            12: {
+                title: "Episode 12 - The End (Final)",
+                description: "The finale brings resolution to all conflicts and mysteries. The ultimate truth is unveiled as our heroes face their greatest challenge yet.",
+                videoUrl: "video12.mp4"
+            }
+        };
+        
+        let currentEpisode = 12; // Default to Episode 12
+        
+        function loadEpisode(episodeNum) {
+            const episode = episodes[episodeNum];
+            if (!episode) return;
+            
+            currentEpisode = episodeNum;
+            
+            // Update video player
+            document.getElementById('videoSource').src = episode.videoUrl;
+            document.getElementById('videoPlayer').load();
+            
+            // Update episode info
+            document.getElementById('episodeNumber').textContent = episodeNum;
+            document.getElementById('episodeTitle').textContent = episode.title.split(' - ')[1];
+            document.getElementById('episodeDescription').textContent = episode.description;
+            
+            // Update active button
+            document.querySelectorAll('.episode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-episode="${episodeNum}"]`).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function initializeEpisodes() {
+            const container = document.getElementById('episodesContainer');
+            
+            for (let i = 1; i <= 12; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'episode-btn' + (i === 12 ? ' active' : '');
+                btn.textContent = `Episode ${i}`;
+                btn.setAttribute('data-episode', i);
+                btn.onclick = () => loadEpisode(i);
+                container.appendChild(btn);
+            }
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeEpisodes();
+            loadEpisode(12); // Load Episode 12 by default
+        });
+    </script>
+</body>
+</html>
