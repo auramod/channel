@@ -12,8 +12,8 @@
         }
         
         body {
-            background: #1a1a1a;
-            color: #fff;
+            background: #000000;
+            color: #2f2371;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 20px;
         }
@@ -31,11 +31,11 @@
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
-            color: #ff6b00;
+            color: #4c00ff;
         }
         
         .video-container {
-            background: #000;
+            background: #383636;
             border-radius: 10px;
             overflow: hidden;
             margin-bottom: 30px;
@@ -57,7 +57,7 @@
         
         .episode-info h2 {
             margin-bottom: 10px;
-            color: #ff6b00;
+            color: #4400ff;
         }
         
         .episodes-grid {
@@ -71,7 +71,7 @@
             padding: 12px 20px;
             background: #333;
             border: 2px solid #555;
-            color: #fff;
+            color: #0004ff;
             cursor: pointer;
             border-radius: 6px;
             transition: all 0.3s ease;
@@ -80,15 +80,15 @@
         }
         
         .episode-btn:hover {
-            background: #ff6b00;
-            border-color: #ff6b00;
+            background: #3b00fc;
+            border-color: #3708f3;
             transform: translateY(-2px);
         }
         
         .episode-btn.active {
-            background: #ff6b00;
-            border-color: #ff6b00;
-            box-shadow: 0 0 15px rgba(255, 107, 0, 0.5);
+            background: #5100ff;
+            border-color: #000000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
         }
         
         .description {
@@ -138,61 +138,37 @@
             2: {
                 title: "Episode 2 - Secrets Unveiled",
                 description: "Hidden secrets start to surface as investigations deepen.",
-                videoUrl: "video2.mp4"
+                videoUrl: "https://hub.toxix.buzz/93d935ecc9e01a81c5ae604ff6631730?token=1775364126"
             },
             3: {
                 title: "Episode 3 - The Hunt",
                 description: "The search intensifies with new clues and suspects.",
-                videoUrl: "video3.mp4"
+                videoUrl: "https://hub.toxix.buzz/64f01e79dc30cc18604c9ced78dab640?token=1775364077"
             },
             4: {
                 title: "Episode 4 - Betrayal",
                 description: "Trust is shattered as betrayal comes from an unexpected source.",
-                videoUrl: "video4.mp4"
+                videoUrl: "https://hub.toxix.buzz/f4a917493c3c59a2ed8f540ca663ce6c?token=1775361579"
             },
             5: {
                 title: "Episode 5 - Breakthrough",
                 description: "A major breakthrough brings new leads and complications.",
-                videoUrl: "video5.mp4"
+                videoUrl: "https://hub.toxix.buzz/c10df978e9a72e3e7dea9a4418fe18dd?token=1775361973"
             },
             6: {
                 title: "Episode 6 - The Trap",
                 description: "Our heroes fall into a dangerous trap set by the antagonist.",
-                videoUrl: "video6.mp4"
+                videoUrl: "https://hub.toxix.buzz/c3874598ad6e1713ca6614e6c3a782f4?token=1775359745"
             },
             7: {
                 title: "Episode 7 - Escape",
                 description: "A daring escape attempt puts everything on the line.",
-                videoUrl: "video7.mp4"
+                videoUrl: "https://hub.toxix.buzz/f5713686a7d7da30243777225ddc8eee?token=1775364113"
             },
-            8: {
-                title: "Episode 8 - Resurrection",
-                description: "Old ghosts from the past come back to haunt them.",
-                videoUrl: "video8.mp4"
-            },
-            9: {
-                title: "Episode 9 - The Truth",
-                description: "The truth behind everything is finally revealed.",
-                videoUrl: "video9.mp4"
-            },
-            10: {
-                title: "Episode 10 - All In",
-                description: "Everything comes to a head in this critical episode.",
-                videoUrl: "video10.mp4"
-            },
-            11: {
-                title: "Episode 11 - The Final Stand",
-                description: "The penultimate episode sets up the ultimate confrontation.",
-                videoUrl: "video11.mp4"
-            },
-            12: {
-                title: "Episode 12 - The End (Final)",
-                description: "The finale brings resolution to all conflicts and mysteries. The ultimate truth is unveiled as our heroes face their greatest challenge yet.",
-                videoUrl: "video12.mp4"
-            }
+
         };
         
-        let currentEpisode = 12; // Default to Episode 12
+        let currentEpisode = 7; // Default to Episode 7
         
         function loadEpisode(episodeNum) {
             const episode = episodes[episodeNum];
@@ -222,9 +198,9 @@
         function initializeEpisodes() {
             const container = document.getElementById('episodesContainer');
             
-            for (let i = 1; i <= 12; i++) {
+            for (let i = 1; i <= 7; i++) {
                 const btn = document.createElement('button');
-                btn.className = 'episode-btn' + (i === 12 ? ' active' : '');
+                btn.className = 'episode-btn' + (i === 7 ? ' active' : '');
                 btn.textContent = `Episode ${i}`;
                 btn.setAttribute('data-episode', i);
                 btn.onclick = () => loadEpisode(i);
@@ -235,7 +211,7 @@
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', () => {
             initializeEpisodes();
-            loadEpisode(12); // Load Episode 12 by default
+            loadEpisode(7); // Load Episode 7 by default
         });
     </script>
 </body>
