@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boyfriend on Demand - Drama Video Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000000;
+            color: #2f2371;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #4c00ff;
+        }
+        
+        .video-container {
+            background: #383636;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+        
+        .episode-info {
+            background: #222;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+        
+        .episode-info h2 {
+            margin-bottom: 10px;
+            color: #4400ff;
+        }
+        
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .episode-btn {
+            padding: 12px 20px;
+            background: #333;
+            border: 2px solid #555;
+            color: #0004ff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1em;
+        }
+        
+        .episode-btn:hover {
+            background: #3b00fc;
+            border-color: #3708f3;
+            transform: translateY(-2px);
+        }
+        
+        .episode-btn.active {
+            background: #5100ff;
+            border-color: #000000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        .quality-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .quality-btn {
+            padding: 10px 15px;
+            background: #333;
+            border: 2px solid #555;
+            color: #0004ff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+            margin: 0 5px;
+        }
+        
+        .quality-btn:hover {
+            background: #3b00fc;
+            border-color: #3708f3;
+            transform: translateY(-2px);
+        }
+        
+        .quality-btn.active {
+            background: #5100ff;
+            border-color: #000000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        .description {
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 BOYFRIEND ON DEMAND</h1>
+            <p>K-Drama Series | Watch All Episodes</p>
+        </div>
+        
+        <div class="video-container">
+            <video class="video-player" id="videoPlayer" controls>
+                <source id="videoSource" src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="quality-container">
+            <h3>Select Quality:</h3>
+            <button class="quality-btn" data-quality="720p">720p</button>
+            <button class="quality-btn" data-quality="1080p">1080p</button>
+        </div>
+        
+        <div class="episode-info">
+            <h2>Episode <span id="episodeNumber">12</span>: <span id="episodeTitle">Loading...</span></h2>
+            <p><strong>Status:</strong> <span id="episodeStatus">Available</span></p>
+        </div>
+        
+        <div class="description">
+            <h3>Description</h3>
+            <p id="episodeDescription">Episode 12 description will be displayed here...</p>
+        </div>
+        
+        <h3 style="margin-top: 40px; margin-bottom: 20px;">Select Episode:</h3>
+        <div class="episodes-grid" id="episodesContainer"></div>
+    </div>
+    
+    <script>
+        const episodes = {
+            1: {
+                title: "Episode 1 - The Beginning",
+                description: "Gun-woo puts his mother's safety first; Hong Woo-jin turns to an old friend for help; but Baek-jeong's men soon catch up after tailing their every move.",
+                videoUrls: {
+                    '720p': "https://hub.pizzacdn.buzz/856d04a26d4cca445ecca99c5fb3c1ac?token=1775832700136",
+                    '1080p': "https://hub.pizzacdn.buzz/4a9a1afbe16d6cef03a60743095b8968?token=1775837244137"
+                }
+            },
+            2: {
+                title: "Episode 2 - Secrets Unveiled",
+                description: "Hidden secrets start to surface as investigations deepen.",
+                videoUrls: {
+                    '720p': "https://hub.pizzacdn.buzz/4a9a1afbe16d6cef03a60743095b8968?token=1775837244137",
+                    '1080p': "https://hub.pizzacdn.buzz/cabe0342cc9074cc2b1af2282445bcde?token=1775837289138"
+                }
+            },
+            3: {
+                title: "Episode 3 - The Hunt",
+                description: "The search intensifies with new clues and suspects.",
+                videoUrls: {
+                    '720p': "https://hub.pizzacdn.buzz/21a083fb802dab04c89723ee49e4759e?token=1775832917138",
+                    '1080p': "https://hub.pizzacdn.buzz/6f59f4135df42a377abb8374b7936fe4?token=1775837341139"
+                }
+            },
+            4: {
+                title: "Episode 4 - Betrayal",
+                description: "Trust is shattered as betrayal comes from an unexpected source.",
+                videoUrls: {
+                    '720p': "https://hub.pizzacdn.buzz/5ef15e2f3275733a916afd85ff08366f?token=1775833558139",
+                    '1080p': "https://hub.pizzacdn.buzz/aaddb8731be0510fd06deaf0501693a9?token=1775837404140"
+                }
+            },
+            5: {
+                title: "Episode 5 - Breakthrough",
+                description: "A major breakthrough brings new leads and complications.",
+                videoUrls: {
+                    '720p': "https://hub.pizzacdn.buzz/de750109b804f365216c7648b887678d?token=1775833703140",
+                    '1080p': "https://hub.pizzacdn.buzz/b39d9587783e222d604efc494d31318b?token=1775837450140"
+                }
+            },
+            6: {
+                title: "Episode 6 - The Trap",
+                description: "Our heroes fall into a dangerous trap set by the antagonist.",
+                videoUrls: {
+                    '720p': "https://hub.pizzacdn.buzz/d1d584828002032247b6aa59b79e63eb?token=1775835988141",
+                    '1080p': "https://hub.pizzacdn.buzz/f51e4fb0118db5aa3acdff999a90951c?token=1775832064141"
+                }
+            },
+            7: {
+                title: "Episode 7 - Escape",
+                description: "A daring escape attempt puts everything on the line.",
+                videoUrls: {
+                    '720p': "https://hub.pizzacdn.buzz/bc4ce37fd265c30c1ea7aff8cc502659?token=1775837520142",
+                    '1080p': "https://hub.pizzacdn.buzz/81a9740a3c742525937bf1283b2908a3?token=1775835001142"
+                }
+            },
+             8: {
+                title: "Episode 8 - Revelation",
+                description: "Dark secrets are revealed, changing everything.",
+                videoUrls: {
+                    '720p': "https://hub.pizzacdn.buzz/8b6aba26cd918d216da4dd83b42664a2?token=1775837561142",
+                    '1080p': "https://hub.pizzacdn.buzz/e36963f9925ede50f7d76a5194ecda91?token=1775835772143"
+                }
+            },
+             9: {
+                title: "Episode 9 - Confrontation",
+                description: "The final confrontation approaches with high stakes.",
+                videoUrls: {
+                    '720p': "https://hub.pizzacdn.buzz/31c40981d505e7ba2a9faeaf9439ddb8?token=1775837612143",
+                    '1080p': "https://hub.pizzacdn.buzz/8653783da40ab9e920a506228bc1daf7?token=1775835897143"
+                }
+            },
+             10: {
+                title: "Episode 10 - Resolution",
+                description: "The series concludes with a satisfying resolution.",
+                videoUrls: {
+                    '720p': "https://hub.pizzacdn.buzz/444d044a9fbec47ccc4c731a5762310f?token=1775837668144",
+                    '1080p': "https://hub.pizzacdn.buzz/c06bc4f48353cb2f48552f228009950f?token=1775837702145"
+                }
+            },
+
+        };
+        
+        let currentEpisode = 10; // Default to Episode 10
+        let currentQuality = '720p'; // Default quality
+        
+        function changeQuality(quality) {
+            currentQuality = quality;
+            
+            // Update video player
+            const episode = episodes[currentEpisode];
+            document.getElementById('videoSource').src = episode.videoUrls[quality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update active button
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-quality="${quality}"]`).classList.add('active');
+        }
+        
+        function loadEpisode(episodeNum) {
+            const episode = episodes[episodeNum];
+            if (!episode) return;
+            
+            currentEpisode = episodeNum;
+            
+            // Update video player
+            document.getElementById('videoSource').src = episode.videoUrls[currentQuality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update episode info
+            document.getElementById('episodeNumber').textContent = episodeNum;
+            document.getElementById('episodeTitle').textContent = episode.title.split(' - ')[1];
+            document.getElementById('episodeDescription').textContent = episode.description;
+            
+            // Update active button
+            document.querySelectorAll('.episode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-episode="${episodeNum}"]`).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function initializeEpisodes() {
+            const container = document.getElementById('episodesContainer');
+            
+            for (let i = 1; i <= 10; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'episode-btn' + (i === 10 ? ' active' : '');
+                btn.textContent = `Episode ${i}`;
+                btn.setAttribute('data-episode', i);
+                btn.onclick = () => loadEpisode(i);
+                container.appendChild(btn);
+            }
+            
+            // Initialize quality buttons
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.onclick = () => changeQuality(btn.getAttribute('data-quality'));
+            });
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeEpisodes();
+            loadEpisode(10); // Load Episode 10 by default
+        });
+    </script>
+</body>
+</html>
