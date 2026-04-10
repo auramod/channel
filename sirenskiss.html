@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siren's Kiss - Drama Video Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000000;
+            color: #2f2371;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #4c00ff;
+        }
+        
+        .video-container {
+            background: #383636;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+        
+        .episode-info {
+            background: #222;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+        
+        .episode-info h2 {
+            margin-bottom: 10px;
+            color: #4400ff;
+        }
+        
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .episode-btn {
+            padding: 12px 20px;
+            background: #333;
+            border: 2px solid #555;
+            color: #0004ff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1em;
+        }
+        
+        .episode-btn:hover {
+            background: #3b00fc;
+            border-color: #3708f3;
+            transform: translateY(-2px);
+        }
+        
+        .episode-btn.active {
+            background: #5100ff;
+            border-color: #000000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        .quality-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .quality-btn {
+            padding: 10px 15px;
+            background: #333;
+            border: 2px solid #555;
+            color: #0004ff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+            margin: 0 5px;
+        }
+        
+        .quality-btn:hover {
+            background: #3b00fc;
+            border-color: #3708f3;
+            transform: translateY(-2px);
+        }
+        
+        .quality-btn.active {
+            background: #5100ff;
+            border-color: #000000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        .description {
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 SIREN'S KISS</h1>
+            <p>K-Drama Series | Watch All Episodes</p>
+        </div>
+        
+        <div class="video-container">
+            <video class="video-player" id="videoPlayer" controls>
+                <source id="videoSource" src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="quality-container">
+            <h3>Select Quality:</h3>
+            <button class="quality-btn active" data-quality="480p">480p</button>
+            <button class="quality-btn" data-quality="720p">720p</button>
+            <button class="quality-btn" data-quality="1080p">1080p</button>
+        </div>
+        
+        <div class="episode-info">
+            <h2>Episode <span id="episodeNumber">12</span>: <span id="episodeTitle">Loading...</span></h2>
+            <p><strong>Status:</strong> <span id="episodeStatus">Available</span></p>
+        </div>
+        
+        <div class="description">
+            <h3>Description</h3>
+            <p id="episodeDescription">Episode 12 description will be displayed here...</p>
+        </div>
+        
+        <h3 style="margin-top: 40px; margin-bottom: 20px;">Select Episode:</h3>
+        <div class="episodes-grid" id="episodesContainer"></div>
+    </div>
+    
+    <script>
+        const episodes = {
+            1: {
+                title: "Episode 1 - The Beginning",
+                description: "Gun-woo puts his mother's safety first; Hong Woo-jin turns to an old friend for help; but Baek-jeong's men soon catch up after tailing their every move.",
+                videoUrls: {
+                    '480p': "https://hub.hailmary.lat/4fdcc125f9013e4105a39185a63417d6?token=1775834633153",
+                    '720p': "https://hub.hailmary.lat/5895c635d3f5fb11c74f0b872343d957?token=1775834730155",
+                    '1080p': "https://hub.hailmary.lat/d8f283d9a9ee9a4d67b37f2212132fa4?token=1775834771156"
+                }
+            },
+            2: {
+                title: "Episode 2 - Secrets Unveiled",
+                description: "Hidden secrets start to surface as investigations deepen.",
+                videoUrls: {
+                    '480p': "https://hub.pizzacdn.buzz/6c8cf37af1c9577d9029d03fe69b881e?token=1775834853",
+                    '720p': "https://hub.pizzacdn.buzz/eb6ff5507f8e55a9505261f4f629c13d?token=1775834899158",
+                    '1080p': "https://hub.pizzacdn.buzz/12c5678c9dc19d34a747840dbec8e140?token=1775834951159"
+                }
+            },
+            3: {
+                title: "Episode 3 - The Hunt",
+                description: "The search intensifies with new clues and suspects.",
+                videoUrls: {
+                    '480p': "https://hub.pizzacdn.buzz/4790ca1137e7f6ed191253dc289fdd1a?token=177583501610",
+                    '720p': "https://hub.pizzacdn.buzz/475d5cba16b20242e1cfcbe6a0fdde8f?token=1775835054",
+                    '1080p': "https://hub.pizzacdn.buzz/d694ddc3f8f766937106821f352ed769?token=177583508711"
+                }
+            },
+            4: {
+                title: "Episode 4 - Betrayal",
+                description: "Trust is shattered as betrayal comes from an unexpected source.",
+                videoUrls: {
+                    '480p': "https://hub.pizzacdn.buzz/0e11c6de8ecb09347b86af5142ac95dd?token=177583514512",
+                    '720p': "https://hub.pizzacdn.buzz/7839600f3e32dfe8a4efdd81aec511c7?token=177583243313",
+                    '1080p': "https://hub.pizzacdn.buzz/521a57a963cdd753d684036316c5f833?token=177583520813"
+                }
+            },
+            5: {
+                title: "Episode 5 - Breakthrough",
+                description: "A major breakthrough brings new leads and complications.",
+                videoUrls: {
+                    '480p': "https://hub.mayhem.buzz/9cf3a396ed49377a98e8fda000a30077?token=177583542117",
+                    '720p': "https://hub.mayhem.buzz/496c6320b21fb60d4381fb4f434e671d?token=177583447017",
+                    '1080p': "https://hub.mayhem.buzz/6a61b1d1a410c6f4cc5c53b599eb8f54?token=177583548418"
+                }
+            },
+            6: {
+                title: "Episode 6 - The Trap",
+                description: "Our heroes fall into a dangerous trap set by the antagonist.",
+                videoUrls: {
+                    '480p': "https://hub.mayhem.buzz/34a58a5fcc7662951e8291abd5497d13?token=177583216019",
+                    '720p': "https://hub.mayhem.buzz/4623ecc25311d48d34ac071ea122d9e0?token=1775832054111",
+                    '1080p': "https://hub.mayhem.buzz/9474b8ebdc37e6678a0acadc667a8a29?token=1775832167111"
+                }
+            },
+            7: {
+                title: "Episode 7 - Escape",
+                description: "A daring escape attempt puts everything on the line.",
+                videoUrls: {
+                    '480p': "https://hub.shipcdn.buzz/c40d082795269297797ffff5cc221a8d?token=1775836008116",
+                    '720p': "https://hub.shipcdn.buzz/2813c45a8b2a49c175980f2196b4afb5?token=1775834278117",
+                    '1080p': "https://hub.shipcdn.buzz/1d0973eef601c21edc473164df7240df?token=1775836059117"
+                }
+            },
+             8: {
+                title: "Episode 8 - Revelation",
+                description: "Dark secrets are revealed, changing everything.",
+                videoUrls: {
+                    '480p': "https://hub.shipcdn.buzz/83956b6e6f9b00f9ba5eef4e2c92fd57?token=1775836212",
+                    '720p': "https://hub.shipcdn.buzz/557961403f57da7ef1492dda4fd9ecf6?token=1775834356120",
+                    '1080p': "https://hub.shipcdn.buzz/ebcfc93258321099b3d2c9d1054b52fd?token=1775836269121"
+                }
+            },
+             9: {
+                title: "Episode 9 - Confrontation",
+                description: "The final confrontation approaches with high stakes.",
+                videoUrls: {
+                    '480p': "https://hub.hailmary.lat/f0c38e47a48a33f1028dcdb6b7cf2f7e?token=1775834467",
+                    '720p': "https://hub.hailmary.lat/8ecd427ae1d0836ae22f1234832c6397?token=1775836347122",
+                    '1080p': "https://hub.hailmary.lat/d32df9d70f364a9dacb20c76ea1b6de5?token=1775836374122"
+                }
+            },
+             10: {
+                title: "Episode 10 - Resolution",
+                description: "The series concludes with a satisfying resolution.",
+                videoUrls: {
+                    '480p': "https://hub.hailmary.lat/58d3ebce04d958a35c5d261e870925e9?token=1775834546123",
+                    '720p': "https://hub.hailmary.lat/7314e382ad3709fbbe4a14d1816d7c30?token=1775836456124",
+                    '1080p': "https://hub.hailmary.lat/4f105c9f17aa8c08f34aa4b2dfda7a5f?token=1775836482124"
+                }
+            },
+             11: {
+                title: "Episode 11 - Aftermath",
+                description: "The consequences of the series' events unfold.",
+                videoUrls: {
+                    '480p': "https://hub.toxix.buzz/1b4c88ca7e9e89119079e0d970e18e8c?token=1775834619125",
+                    '720p': "https://hub.toxix.buzz/77d8cdc5838c7a7ee6c0a91d58bb606a?token=1775835261125",
+                    '1080p': "https://hub.toxix.buzz/9e83c15128dfe151eb3709cb75019436?token=1775834538126"
+                }
+            },
+             12: {
+                title: "Episode 12 - Legacy",
+                description: "The legacy of the series' events continues to impact the characters.",
+                videoUrls: {
+                    '480p': "https://hub.toxix.buzz/dd79be00f6441823613f4e84c1914f68?token=1775834673126",
+                    '720p': "https://hub.toxix.buzz/fb8f62874a141ae64c5b2a0fa5b37425?token=1775836637127",
+                    '1080p': "https://hub.toxix.buzz/5d4f1ee852123b061b5f5107f0b4e00f?token=1775834732127"
+                }
+            },
+
+        };
+        
+        let currentEpisode = 12; // Default to Episode 12
+        let currentQuality = '480p'; // Default quality
+        
+        function changeQuality(quality) {
+            currentQuality = quality;
+            
+            // Update video player
+            const episode = episodes[currentEpisode];
+            document.getElementById('videoSource').src = episode.videoUrls[quality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update active button
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-quality="${quality}"]`).classList.add('active');
+        }
+        
+        function loadEpisode(episodeNum) {
+            const episode = episodes[episodeNum];
+            if (!episode) return;
+            
+            currentEpisode = episodeNum;
+            
+            // Update video player
+            document.getElementById('videoSource').src = episode.videoUrls[currentQuality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update episode info
+            document.getElementById('episodeNumber').textContent = episodeNum;
+            document.getElementById('episodeTitle').textContent = episode.title.split(' - ')[1];
+            document.getElementById('episodeDescription').textContent = episode.description;
+            
+            // Update active button
+            document.querySelectorAll('.episode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-episode="${episodeNum}"]`).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function initializeEpisodes() {
+            const container = document.getElementById('episodesContainer');
+            
+            for (let i = 1; i <= 12; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'episode-btn' + (i === 12 ? ' active' : '');
+                btn.textContent = `Episode ${i}`;
+                btn.setAttribute('data-episode', i);
+                btn.onclick = () => loadEpisode(i);
+                container.appendChild(btn);
+            }
+            
+            // Initialize quality buttons
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.onclick = () => changeQuality(btn.getAttribute('data-quality'));
+            });
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeEpisodes();
+            loadEpisode(12); // Load Episode 12 by default
+        });
+    </script>
+</body>
+</html>
