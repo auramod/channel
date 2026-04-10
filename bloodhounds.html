@@ -91,6 +91,36 @@
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
         }
         
+        .quality-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .quality-btn {
+            padding: 10px 15px;
+            background: #333;
+            border: 2px solid #555;
+            color: #0004ff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+            margin: 0 5px;
+        }
+        
+        .quality-btn:hover {
+            background: #3b00fc;
+            border-color: #3708f3;
+            transform: translateY(-2px);
+        }
+        
+        .quality-btn.active {
+            background: #5100ff;
+            border-color: #000000;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
         .description {
             background: #222;
             padding: 20px;
@@ -114,6 +144,12 @@
             </video>
         </div>
         
+        <div class="quality-container">
+            <h3>Select Quality:</h3>
+            <button class="quality-btn" data-quality="720p">720p</button>
+            <button class="quality-btn" data-quality="1080p">1080p</button>
+        </div>
+        
         <div class="episode-info">
             <h2>Episode <span id="episodeNumber">12</span>: <span id="episodeTitle">Loading...</span></h2>
             <p><strong>Status:</strong> <span id="episodeStatus">Available</span></p>
@@ -133,42 +169,79 @@
             1: {
                 title: "Episode 1 - The Beginning",
                 description: "Gun-woo puts his mother's safety first; Hong Woo-jin turns to an old friend for help; but Baek-jeong's men soon catch up after tailing their every move.",
-                videoUrl: "https://hub.toxix.buzz/b48ae446c9303f78daad35a902ac7223?token=1775362562"
+                videoUrls: {
+                    '720p': "https://hub.toxix.buzz/b48ae446c9303f78daad35a902ac7223?token=1775362562",
+                    '1080p': "https://hub.toxix.buzz/0b4b00d9cf42c213fff5e3362d2f1952?token=1775832250"
+                }
             },
             2: {
                 title: "Episode 2 - Secrets Unveiled",
                 description: "Hidden secrets start to surface as investigations deepen.",
-                videoUrl: "https://hub.toxix.buzz/93d935ecc9e01a81c5ae604ff6631730?token=1775364126"
+                videoUrls: {
+                    '720p': "https://hub.toxix.buzz/93d935ecc9e01a81c5ae604ff6631730?token=1775364126",
+                    '1080p': "https://hub.toxix.buzz/e9aec61844fb6b0b7c13ed6bd1182e5a?token=1775832539"
+                }
             },
             3: {
                 title: "Episode 3 - The Hunt",
                 description: "The search intensifies with new clues and suspects.",
-                videoUrl: "https://hub.toxix.buzz/64f01e79dc30cc18604c9ced78dab640?token=1775364077"
+                videoUrls: {
+                    '720p': "https://hub.toxix.buzz/64f01e79dc30cc18604c9ced78dab640?token=1775364077",
+                    '1080p': "https://hub.toxix.buzz/967352d33aa981b9385ba400209907c5?token=1775832582"
+                }
             },
             4: {
                 title: "Episode 4 - Betrayal",
                 description: "Trust is shattered as betrayal comes from an unexpected source.",
-                videoUrl: "https://hub.toxix.buzz/f4a917493c3c59a2ed8f540ca663ce6c?token=1775361579"
+                videoUrls: {
+                    '720p': "https://hub.toxix.buzz/f4a917493c3c59a2ed8f540ca663ce6c?token=1775361579",
+                    '1080p': "https://hub.toxix.buzz/ba4067f4b0aa0825282e066c88a31865?token=1775832643"
+                }
             },
             5: {
                 title: "Episode 5 - Breakthrough",
                 description: "A major breakthrough brings new leads and complications.",
-                videoUrl: "https://hub.toxix.buzz/c10df978e9a72e3e7dea9a4418fe18dd?token=1775361973"
+                videoUrls: {
+                    '720p': "https://hub.toxix.buzz/c10df978e9a72e3e7dea9a4418fe18dd?token=1775361973",
+                    '1080p': "https://hub.toxix.buzz/f6c7c1ab673495ed98a3a7ec2e6631a1?token=1775832689"
+                }
             },
             6: {
                 title: "Episode 6 - The Trap",
                 description: "Our heroes fall into a dangerous trap set by the antagonist.",
-                videoUrl: "https://hub.toxix.buzz/c3874598ad6e1713ca6614e6c3a782f4?token=1775359745"
+                videoUrls: {
+                    '720p': "https://hub.toxix.buzz/c3874598ad6e1713ca6614e6c3a782f4?token=1775359745",
+                    '1080p': "https://hub.toxix.buzz/6aed4b3b7946a0ab15ea63093775a9dd?token=1775832738"
+                }
             },
             7: {
                 title: "Episode 7 - Escape",
                 description: "A daring escape attempt puts everything on the line.",
-                videoUrl: "https://hub.toxix.buzz/f5713686a7d7da30243777225ddc8eee?token=1775364113"
+                videoUrls: {
+                    '720p': "https://hub.toxix.buzz/f5713686a7d7da30243777225ddc8eee?token=1775364113",
+                    '1080p': "https://hub.toxix.buzz/635c5d56de95b5edbba5ca621d09133b?token=1775832784"
+                }
             },
 
         };
         
         let currentEpisode = 7; // Default to Episode 7
+        let currentQuality = '480p'; // Default quality
+        
+        function changeQuality(quality) {
+            currentQuality = quality;
+            
+            // Update video player
+            const episode = episodes[currentEpisode];
+            document.getElementById('videoSource').src = episode.videoUrls[quality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update active button
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-quality="${quality}"]`).classList.add('active');
+        }
         
         function loadEpisode(episodeNum) {
             const episode = episodes[episodeNum];
@@ -177,7 +250,7 @@
             currentEpisode = episodeNum;
             
             // Update video player
-            document.getElementById('videoSource').src = episode.videoUrl;
+            document.getElementById('videoSource').src = episode.videoUrls[currentQuality];
             document.getElementById('videoPlayer').load();
             
             // Update episode info
@@ -206,6 +279,11 @@
                 btn.onclick = () => loadEpisode(i);
                 container.appendChild(btn);
             }
+            
+            // Initialize quality buttons
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.onclick = () => changeQuality(btn.getAttribute('data-quality'));
+            });
         }
         
         // Initialize on page load
