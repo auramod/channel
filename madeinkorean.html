@@ -31,20 +31,20 @@
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
-            color: #4c00ff;
+            color: #ff2222;
         }
         
         .header p {
-            color: #8460ee;
+            color: #a90000;
             font-size: 1.1em;
         }
         
         .video-container {
-            background: #383636;
+            background: #ed7272;
             border-radius: 10px;
             overflow: hidden;
             margin-bottom: 30px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            box-shadow: 0 0px 24px rgba(255, 0, 0, 0.5);
         }
         
         .video-player {
@@ -54,7 +54,7 @@
         }
         
         .movie-info {
-            background: #222;
+            background: #2e0101;
             padding: 20px;
             margin-top: 20px;
             border-radius: 8px;
@@ -62,11 +62,11 @@
         
         .movie-info h2 {
             margin-bottom: 10px;
-            color: #4400ff;
+            color: #ff0707;
         }
         
         .movie-info p {
-            color: #aaa;
+            color: #ff0000;
             margin-bottom: 8px;
         }
         
@@ -79,9 +79,9 @@
         
         .movie-btn {
             padding: 12px 20px;
-            background: #333;
+            background: #fff9f9;
             border: 2px solid #555;
-            color: #0004ff;
+            color: #ff0000;
             cursor: pointer;
             border-radius: 6px;
             transition: all 0.3s ease;
@@ -91,15 +91,15 @@
         }
         
         .movie-btn:hover {
-            background: #3b00fc;
-            border-color: #3708f3;
+            background: #bab5b5;
+            border-color: #f5f2ff;
             transform: translateY(-2px);
         }
         
         .movie-btn.active {
-            background: #5100ff;
+            background: #000000;
             border-color: #000000;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 15px #ff0000;
         }
         
         .quality-container {
@@ -108,15 +108,15 @@
         }
         
         .quality-container h3 {
-            color: #4400ff;
+            color: #ff0000;
             margin-bottom: 15px;
         }
         
         .quality-btn {
             padding: 10px 15px;
-            background: #333;
-            border: 2px solid #555;
-            color: #0004ff;
+            background: #580000;
+            border: 2px solid #520202;
+            color: #ff0000;
             cursor: pointer;
             border-radius: 6px;
             transition: all 0.3s ease;
@@ -126,19 +126,19 @@
         }
         
         .quality-btn:hover {
-            background: #3b00fc;
-            border-color: #3708f3;
+            background: #fcfcfc;
+            border-color: #fe0000;
             transform: translateY(-2px);
         }
         
         .quality-btn.active {
-            background: #5100ff;
-            border-color: #000000;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            background: #000000;
+            border-color: #ff0000;
+            box-shadow: 0 0 20px rgba(255, 1, 1, 0.5);
         }
         
         .description {
-            background: #222;
+            background: #894e4e;
             padding: 20px;
             border-radius: 8px;
             line-height: 1.6;
@@ -147,12 +147,12 @@
         }
         
         .description h3 {
-            color: #4400ff;
+            color: #640101;
             margin-bottom: 10px;
         }
 
         .movies-label {
-            color: #4400ff;
+            color: #f20000;
             font-size: 1.2em;
             margin-top: 40px;
             margin-bottom: 20px;
@@ -163,7 +163,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎬 MADE IN KOREAN</h1>
+            <h1> MADE IN KOREAN</h1>
             <p>movie</p>
         </div>
         
@@ -186,11 +186,6 @@
             <p><strong>Year:</strong> <span id="movieYear">-</span></p>
             <p><strong>Genre:</strong> <span id="movieGenre">-</span></p>
             <p><strong>Rating:</strong> <span id="movieRating">-</span></p>
-        </div>
-        
-        <div class="description">
-            <h3>Synopsis</h3>
-            <p id="movieDescription">Movie description will be displayed here...</p>
         </div>
         
         <div class="movies-label"> Movie:</div>
