@@ -47,6 +47,18 @@
             font-size: 14px;
             margin-bottom: 10px;
         }
+        .search-wrapper {
+            margin-top: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .search-input {
+            max-width: 420px;
+            margin: 0 auto;
+            background: #111;
+            border: 1px solid #444;
+            color: #fff;
+        }
          h1   {
             color: #4000ff;  }
             p.lead {
@@ -57,6 +69,9 @@
     <div class="page-header">
         <h1>movie8u</h1>
         <p class="lead">wellcome</p>
+        <div class="search-wrapper">
+            <input id="movieSearch" class="form-control search-input" type="search" placeholder="Search movies...">
+        </div>
     </div>
 
     <div class="container">
@@ -74,14 +89,14 @@
             </div>
 
             <!-- Movie 2 -->
-            <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
+              <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2">
                 <div class="movie-thumb"> <a href="sirenskiss.html">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQiTGmRaucssHpOg_O4s8eWJf2L9d3zfahs2Q&s" alt="Movie 2">
                     <div class="movie-info">
                         <div class="movie-title">Siren's Kiss</div>
                         <div class="movie-year">2026</div>
                         <div class="movie-rating">Hindi</div>
-                    </div> 
+                    </div>
                 </div>
             </div>
 
@@ -209,5 +224,17 @@
 
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#movieSearch').on('input', function() {
+                const query = $(this).val().trim().toLowerCase();
+                $('.movie-thumb').each(function() {
+                    const title = $(this).find('.movie-title').text().toLowerCase();
+                    const match = title.indexOf(query) !== -1;
+                    $(this).closest('.col-xs-6').toggle(match || query === '');
+                });
+            });
+        });
+    </script>
 </body>
 </html>
