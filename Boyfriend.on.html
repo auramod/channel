@@ -306,7 +306,7 @@
             
             for (let i = 1; i <= 10; i++) {
                 const btn = document.createElement('button');
-                btn.className = 'episode-btn' + (i === 0 ? ' active' : '');
+                btn.className = 'episode-btn' + (i === 10 ? ' active' : '1');
                 btn.textContent = `Episode ${i}`;
                 btn.setAttribute('data-episode', i);
                 btn.onclick = () => loadEpisode(i);
