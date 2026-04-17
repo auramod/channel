@@ -162,6 +162,99 @@
     </div>
     
     <script>
+        const episodes = {
+            1: {
+                title: "Episode 1 - The Beginning",
+                description: "Gun-woo puts his mother's safety first; Hong Woo-jin turns to an old friend for help; but Baek-jeong's men soon catch up after tailing their every move.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/36f958c74b87a5f1b371a3b352b9e77e/Boyfriend.On.Demand.S01E01.The.Futures.Of.You.And.Me.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/3c4a2c6226baa8404cdc94b479d2db3a/Boyfriend.On.Demand.S01E01.The.Futures.Of.You.And.Me.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '1080p': ""
+                }
+            },
+            2: {
+                title: "Episode 2 - Secrets Unveiled",
+                description: "Hidden secrets start to surface as investigations deepen.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/835550c4de2312a3488321d906e2c5d0/Boyfriend.On.Demand.S01E02.Cliche.Or.Classic.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/8c319064d2f7bc953f4252b89caa74ab/Boyfriend.On.Demand.S01E02.Cliche.Or.Classic.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '1080p': ""
+                }
+            },
+            3: {
+                title: "Episode 3 - The Hunt",
+                description: "The search intensifies with new clues and suspects.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0b5aa1d97756d95d9688d161ade247ec/Boyfriend.On.Demand.S01E03.First.Love.101.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/afa97bb4a48da32b0e5cc0d9530f10a3/Boyfriend.On.Demand.S01E03.First.Love.101.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '1080p': ""
+                }
+            },
+            4: {
+                title: "Episode 4 - Betrayal",
+                description: "Trust is shattered as betrayal comes from an unexpected source.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/73d2254d95572c62c229b4b74cbe2736/Boyfriend.On.Demand.S01E04.No.Risk.High.Return.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/e8a7574993b32bd9b60a54d0946cb47c/Boyfriend.On.Demand.S01E04.No.Risk.High.Return.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '1080p': ""
+                }
+            },
+            5: {
+                title: "Episode 5 - Breakthrough",
+                description: "A major breakthrough brings new leads and complications.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/a7977ba290a4391d471ed09a4a53a65b/Boyfriend.On.Demand.S01E05.The.Caveats.Of.Perfection.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/b209550cd0cb100364ab21e41d6bbd3e/Boyfriend.On.Demand.S01E05.The.Caveats.Of.Perfection.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '1080p': ""
+                }
+            },
+            6: {
+                title: "Episode 6 - The Trap",
+                description: "Our heroes fall into a dangerous trap set by the antagonist.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/cf668484e6bd9f1843291c082b41cd45/Boyfriend.On.Demand.S01E06.The.Hybrid.Man.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/b7bd8eec7eabe1bc7adc05f0c53e89be/Boyfriend.On.Demand.S01E06.The.Hybrid.Man.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '1080p': ""
+                }
+            },
+            7: {
+                title: "Episode 7 - Escape",
+                description: "A daring escape attempt puts everything on the line.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0439e8a89e9318f2e38912f1027c44d4/Boyfriend.On.Demand.S01E07.The.Algorithm.Of.Feelings.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/991adfba6a8f05673c4f9df943b30422/Boyfriend.On.Demand.S01E07.The.Algorithm.Of.Feelings.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '1080p': ""
+                }
+            },
+             8: {
+                title: "Episode 8 - Revelation",
+                description: "Dark secrets are revealed, changing everything.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/1f591b3ec19efdb85df50c2a7c0884e0/Boyfriend.On.Demand.S01E08.The.Odd.Or.Even.Game.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/1fc06899f95106f1bc0597b446aad43d/Boyfriend.On.Demand.S01E08.The.Odd.Or.Even.Game.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '1080p': ""
+                }
+            },
+             9: {
+                title: "Episode 9 - Confrontation",
+                description: "The final confrontation approaches with high stakes.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/5cc305493c12d42e93bea5787f946d9c/Boyfriend.On.Demand.S01E09.Like.Or.Love.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/4ac6113ca4890915c623a83c305aff83/Boyfriend.On.Demand.S01E09.Like.Or.Love.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '1080p': ""
+                }
+            },
+             10: {
+                title: "Episode 10 - Resolution",
+                description: "The series concludes with a satisfying resolution.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/7a2c96d62ec328293736234e716a4850/Boyfriend.On.Demand.S01E10.An.Utterly.Normal.Future.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0a322651b2add4f6a8559df7766e45ba/Boyfriend.On.Demand.S01E10.An.Utterly.Normal.Future.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '1080p': ""
+                }
+            },
+
+        },
         
         
         
@@ -213,7 +306,7 @@
             
             for (let i = 1; i <= 10; i++) {
                 const btn = document.createElement('button');
-                btn.className = 'episode-btn' + (i === 1 ? ' active' : '');
+                btn.className = 'episode-btn' + (i === 0 ? ' active' : '');
                 btn.textContent = `Episode ${i}`;
                 btn.setAttribute('data-episode', i);
                 btn.onclick = () => loadEpisode(i);
