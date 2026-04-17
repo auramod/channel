@@ -153,7 +153,7 @@
         </div>
         
         <div class="episode-info">
-            <h2>Episode <span id="episodeNumber">12</span>: <span id="episodeTitle">Loading...</span></h2>
+            <h2>Episode <span id="episodeNumber">10</span>: <span id="episodeTitle">Loading...</span></h2>
             <p><strong>Status:</strong> <span id="episodeStatus">Available</span></p>
         </div>
         
@@ -288,7 +288,7 @@
             
             // Update episode info
             document.getElementById('episodeNumber').textContent = episodeNum;
-            document.getElementById('episodeTitle').textContent = episode.title.split(' - ')[1];
+            document.getElementById('episodeTitle').textContent = episode.title.split(' - ')[10];
             document.getElementById('episodeDescription').textContent = episode.description;
             
             // Update active button
@@ -306,7 +306,7 @@
             
             for (let i = 1; i <= 10; i++) {
                 const btn = document.createElement('button');
-                btn.className = 'episode-btn' + (i === 10 ? ' active' : '1');
+                btn.className = 'episode-btn' + (i === 10 ? ' active' : '');
                 btn.textContent = `Episode ${i}`;
                 btn.setAttribute('data-episode', i);
                 btn.onclick = () => loadEpisode(i);
