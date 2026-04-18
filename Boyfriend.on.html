@@ -1,337 +1,174 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Siren's Kiss - Drama Video Player</title>
-
+    <title>Boyfriend on Demand - Drama Video Player</title>
     <style>
-
         * {
-
             margin: 0;
-
             padding: 0;
-
             box-sizing: border-box;
-
         }
-
         
-
         body {
-
             background: #000000;
-
             color: #525254;
-
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-
             padding: 20px;
-
         }
-
         
-
         .container {
-
             max-width: 1200px;
-
             margin: 0 auto;
-
         }
-
         
-
         .header {
-
             margin-bottom: 30px;
-
             text-align: center;
-
         }
-
         
-
         .header h1 {
-
             font-size: 2.5em;
-
             margin-bottom: 10px;
-
             color: #ffffff;
-
         }
-
         
-
         .video-container {
-
             background: #373636;
-
             border-radius: 10px;
-
             overflow: hidden;
-
             margin-bottom: 30px;
-
             box-shadow: 0 0px 20px rgba(187, 187, 187, 0.5);
-
         }
-
         
-
         .video-player {
-
             width: 100%;
-
             aspect-ratio: 16/9;
-
             background: #000;
-
         }
-
         
-
         .episode-info {
-
             background: #353535;
-
             padding: 20px;
-
             margin-top: 20px;
-
             border-radius: 8px;
-
         }
-
         
-
         .episode-info h2 {
-
             margin-bottom: 10px;
-
             color: #929195;
-
         }
-
         
-
         .episodes-grid {
-
             display: grid;
-
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-
             gap: 15px;
-
             margin-top: 30px;
-
         }
-
         
-
         .episode-btn {
-
             padding: 12px 20px;
-
             background: #3f3e3e;
-
             border: 2px solid #a3a0a0;
-
             color: #ffffff;
-
             cursor: pointer;
-
             border-radius: 6px;
-
             transition: all 0.3s ease;
-
             font-weight: 500;
-
             font-size: 1em;
-
         }
-
         
-
         .episode-btn:hover {
-
             background: #000000;
-
             border-color: #5b5b5d;
-
             transform: translateY(-2px);
-
             box-shadow: 0 0 15px rgba(167, 166, 166, 0.5);
-
         }
-
         
-
         .episode-btn.active {
-
             background: #000000;
-
             border-color: #424141;
-
             box-shadow: 0 0 15px rgba(167, 166, 166, 0.5);
-
         }
-
         
-
         .quality-container {
-
             margin-top: 20px;
-
             text-align: center;
-
         }
-
         
-
         .quality-btn {
-
             padding: 10px 15px;
-
             background: #373636;
-
             border: 2px solid #363636;
-
             color: #f7f7ff;
-
             cursor: pointer;
-
             border-radius: 6px;
-
             transition: all 0.3s ease;
-
             font-weight: 500;
-
             font-size: 0.9em;
-
             margin: 0 5px;
-
         }
-
         
-
         .quality-btn:hover {
-
             background: #000000;
-
             border-color: #000000;
-
             transform: translateY(-2px);
-
         }
-
         
-
         .quality-btn.active {
-
             background: #000000;
-
             border-color: #464545;
-
             box-shadow: 0 0 15px rgba(249, 245, 245, 0.5);
-
         }
-
         
-
         .description {
-
             background: #222;
-
             padding: 20px;
-
             border-radius: 8px;
-
             line-height: 1.6;
-
             margin-top: 20px;
-
         }
-
     </style>
-
 </head>
-
 <body>
-
     <div class="container">
-
         <div class="header">
-
-            <h1> SIREN'S KISS</h1>
-
-            <p>K-Drama Series | Watch All Episodes</p>
-
+            <h1>Boyfriend on Demand</h1>
+            <p>Drama Series | Watch All Episodes</p>
         </div>
-
         
-
         <div class="video-container">
-
             <video class="video-player" id="videoPlayer" controls>
-
                 <source id="videoSource" src="" type="video/mp4">
-
                 Your browser does not support the video tag.
-
             </video>
-
         </div>
-
         
-
         <div class="quality-container">
-
             <h3>Select Quality:</h3>
-
-            <button class="quality-btn active" data-quality="480p">480p</button>
-
+            <button class="quality-btn" data-quality="480p">480p</button>
             <button class="quality-btn" data-quality="720p">720p</button>
-
             <button class="quality-btn" data-quality="1080p">1080p</button>
-
         </div>
-
         
-
         <div class="episode-info">
-
-            <h2>Episode <span id="episodeNumber">12</span>: <span id="episodeTitle">Loading...</span></h2>
-
+            <h2>Episode <span id="episodeNumber">8</span>: <span id="episodeTitle">Loading...</span></h2>
             <p><strong>Status:</strong> <span id="episodeStatus">Available</span></p>
-
         </div>
-
         
-
         <h3 style="margin-top: 40px; margin-bottom: 20px;">Select Episode:</h3>
-
         <div class="episodes-grid" id="episodesContainer"></div>
-
     </div>
-
     
-
     <script>
-        const episodes = {
+         const episodes = {
             1: {
                 title: "Episode 1 - The Beginning",
                 description: "Gun-woo puts his mother's safety first; Hong Woo-jin turns to an old friend for help; but Baek-jeong's men soon catch up after tailing their every move.",
                 videoUrls: {
-                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/36f958c74b87a5f1b371a3b352b9e77e/Boyfriend.On.Demand.S01E01.The.Futures.Of.You.And.Me.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
-                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/3c4a2c6226baa8404cdc94b479d2db3a/Boyfriend.On.Demand.S01E01.The.Futures.Of.You.And.Me.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '480p': "",
+                    '720p': "https://cdn.fsl-buckets.life/Bloodhonds.S01E01.720p.WEB-DL.Hindi.AAC.5.1-English.ESub.x264-HDHub4u.Tv.mkv?token=15f9b52d399fafe627a391ad0d5ecb78_133",
                     '1080p': ""
                 }
             },
@@ -339,8 +176,8 @@
                 title: "Episode 2 - Secrets Unveiled",
                 description: "Hidden secrets start to surface as investigations deepen.",
                 videoUrls: {
-                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/835550c4de2312a3488321d906e2c5d0/Boyfriend.On.Demand.S01E02.Cliche.Or.Classic.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
-                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/8c319064d2f7bc953f4252b89caa74ab/Boyfriend.On.Demand.S01E02.Cliche.Or.Classic.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '480p': "",
+                    '720p': "https://fsl.gigabytes.icu/Bloodhounds.S01E02.720p.WEB-DL.Hindi.AAC.5.1-English.ESub.x264-HDHub4u.Tv.mkv?token=15f9b52d399fafe627a391ad0d5ecb78_132",
                     '1080p': ""
                 }
             },
@@ -348,8 +185,8 @@
                 title: "Episode 3 - The Hunt",
                 description: "The search intensifies with new clues and suspects.",
                 videoUrls: {
-                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0b5aa1d97756d95d9688d161ade247ec/Boyfriend.On.Demand.S01E03.First.Love.101.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
-                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/afa97bb4a48da32b0e5cc0d9530f10a3/Boyfriend.On.Demand.S01E03.First.Love.101.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '480p': "",
+                    '720p': "https://cdn.fsl-buckets.work/Bloodhounds.S01E03.720p.WEB-DL.Hindi.AAC.5.1-English.ESub.x264-HDHub4u.Tv.mkv?token=4078cb82f424b108440c6426e5a44af5_131",
                     '1080p': ""
                 }
             },
@@ -357,8 +194,8 @@
                 title: "Episode 4 - Betrayal",
                 description: "Trust is shattered as betrayal comes from an unexpected source.",
                 videoUrls: {
-                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/73d2254d95572c62c229b4b74cbe2736/Boyfriend.On.Demand.S01E04.No.Risk.High.Return.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
-                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/e8a7574993b32bd9b60a54d0946cb47c/Boyfriend.On.Demand.S01E04.No.Risk.High.Return.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '480p': "",
+                    '720p': "https://cdn.fsl-buckets.life/Bloodhounds.S01E04.720p.WEB-DL.Hindi.AAC.5.1-English.ESub.x264-HDHub4u.Tv.mkv?token=15f9b52d399fafe627a391ad0d5ecb78_131",
                     '1080p': ""
                 }
             },
@@ -366,8 +203,8 @@
                 title: "Episode 5 - Breakthrough",
                 description: "A major breakthrough brings new leads and complications.",
                 videoUrls: {
-                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/a7977ba290a4391d471ed09a4a53a65b/Boyfriend.On.Demand.S01E05.The.Caveats.Of.Perfection.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
-                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/b209550cd0cb100364ab21e41d6bbd3e/Boyfriend.On.Demand.S01E05.The.Caveats.Of.Perfection.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '480p': "",
+                    '720p': "https://cdn.fsl-buckets.work/Bloodhounds.S01E05.720p.WEB-DL.Hindi.AAC.5.1-English.ESub.x264-HDHub4u.Tv.mkv?token=4078cb82f424b108440c6426e5a44af5_130",
                     '1080p': ""
                 }
             },
@@ -375,8 +212,8 @@
                 title: "Episode 6 - The Trap",
                 description: "Our heroes fall into a dangerous trap set by the antagonist.",
                 videoUrls: {
-                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/cf668484e6bd9f1843291c082b41cd45/Boyfriend.On.Demand.S01E06.The.Hybrid.Man.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
-                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/b7bd8eec7eabe1bc7adc05f0c53e89be/Boyfriend.On.Demand.S01E06.The.Hybrid.Man.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '480p': "",
+                    '720p': "https://fsl.gigabytes.icu/Bloodhounds.S01E06.720p.WEB-DL.Hindi.AAC.5.1-English.ESub.x264-HDHub4u.Tv.mkv?token=3b8580072e99270fb6cfdf295fe221bc_129",
                     '1080p': ""
                 }
             },
@@ -384,8 +221,8 @@
                 title: "Episode 7 - Escape",
                 description: "A daring escape attempt puts everything on the line.",
                 videoUrls: {
-                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0439e8a89e9318f2e38912f1027c44d4/Boyfriend.On.Demand.S01E07.The.Algorithm.Of.Feelings.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
-                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/991adfba6a8f05673c4f9df943b30422/Boyfriend.On.Demand.S01E07.The.Algorithm.Of.Feelings.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '480p': "",
+                    '720p': "https://cdn.fukggl.buzz/Bloodhounds.S01E07.720p.WEB-DL.Hindi.AAC.5.1-English.ESub.x264-HDHub4u.Tv.mkv?token=4078cb82f424b108440c6426e5a44af5_128",
                     '1080p': ""
                 }
             },
@@ -393,166 +230,99 @@
                 title: "Episode 8 - Revelation",
                 description: "Dark secrets are revealed, changing everything.",
                 videoUrls: {
-                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/1f591b3ec19efdb85df50c2a7c0884e0/Boyfriend.On.Demand.S01E08.The.Odd.Or.Even.Game.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
-                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/1fc06899f95106f1bc0597b446aad43d/Boyfriend.On.Demand.S01E08.The.Odd.Or.Even.Game.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '480p': "",
+                    '720p': "https://video-downloads.googleusercontent.com/ADGPM2nDxMQUmA9L9oWgf4yeGn9szqYEKTfM-j2QdqX3KVQirexuXPpSEaJkKNzCmwK4s6EkvQ6BCctV53jLFyhuNPLxpIVASqI7nEWtgH0jXGIHI7JA_5gh_H35w-0cfZ7QxcYAnodDqmFpp7KK-sWVWvM5jeJ8OUChKsfXVIlk5OsQ6QLFXn6RUHMz-5SpbABWAwYhlgIhSQIQKQ63CCnJMINvLILa2rPrs8vJZ5HqjSRwdc_lOVE",
                     '1080p': ""
                 }
             },
-             9: {
+            9: {
                 title: "Episode 9 - Confrontation",
-                description: "The final confrontation approaches with high stakes.",
+                description: "The final confrontation between good and evil unfolds.",
                 videoUrls: {
-                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/5cc305493c12d42e93bea5787f946d9c/Boyfriend.On.Demand.S01E09.Like.Or.Love.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
-                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/4ac6113ca4890915c623a83c305aff83/Boyfriend.On.Demand.S01E09.Like.Or.Love.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '480p': "",
+                    '720p': "https://cdn.fsl-buckets.work/Bloodhounds.S01E09.720p.WEB-DL.Hindi.AAC.5.1-English.ESub.x264-HDHub4u.Tv.mkv?token=4078cb82f424b108440c6426e5a44af5_126",
                     '1080p': ""
                 }
             },
-             10: {
-                title: "Episode 10 - Resolution",
-                description: "The series concludes with a satisfying resolution.",
+            10: {
+                title: "Episode 10 - The Endgame",
+                description: "The thrilling conclusion to the series.",
                 videoUrls: {
-                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/7a2c96d62ec328293736234e716a4850/Boyfriend.On.Demand.S01E10.An.Utterly.Normal.Future.480P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
-                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0a322651b2add4f6a8559df7766e45ba/Boyfriend.On.Demand.S01E10.An.Utterly.Normal.Future.720P.Hindi.English.Korean.Msubs.MoviesMod.town.mkv",
+                    '480p': "",
+                    '720p': "https://cdn.fsl-buckets.life/Bloodhonds.S01E10.720p.WEB-DL.Hindi.AAC.5.1-English.ESub.x264-HDHub4u.Tv.mkv?token=15f9b52d399fafe627a391ad0d5ecb78_125",
                     '1080p': ""
                 }
-            },
-
-        },
-
-        let currentEpisode = 10; // Default to Episode 12
-
-        let currentQuality = '480p'; // Default quality
-
-        
-
-        function changeQuality(quality) {
-
-            currentQuality = quality;
-
-            
-
-            // Update video player
-
-            const episode = episodes[currentEpisode];
-
-            document.getElementById('videoSource').src = episode.videoUrls[quality];
-
-            document.getElementById('videoPlayer').load();
-
-            
-
-            // Update active button
-
-            document.querySelectorAll('.quality-btn').forEach(btn => {
-
-                btn.classList.remove('active');
-
-            });
-
-            document.querySelector(`[data-quality="${quality}"]`).classList.add('active');
-
-        }
-
-        
-
-        function loadEpisode(episodeNum) {
-
-            const episode = episodes[episodeNum];
-
-            if (!episode) return;
-
-            
-
-            currentEpisode = episodeNum;
-
-            
-
-            // Update video player
-
-            document.getElementById('videoSource').src = episode.videoUrls[currentQuality];
-
-            document.getElementById('videoPlayer').load();
-
-            
-
-            // Update episode info
-
-            document.getElementById('episodeNumber').textContent = episodeNum;
-
-            document.getElementById('episodeTitle').textContent = episode.title.split(' - ')[1];
-
-            document.getElementById('episodeDescription').textContent = episode.description;
-
-            
-
-            // Update active button
-
-            document.querySelectorAll('.episode-btn').forEach(btn => {
-
-                btn.classList.remove('active');
-
-            });
-
-            document.querySelector(`[data-episode="${episodeNum}"]`).classList.add('active');
-
-            
-
-            // Scroll to top
-
-            window.scrollTo(0, 0);
-
-        }
-
-        
-
-        function initializeEpisodes() {
-
-            const container = document.getElementById('episodesContainer');
-
-            
-
-            for (let i = 1; i <= 10; i++) {
-
-                const btn = document.createElement('button');
-
-                btn.className = 'episode-btn' + (i === 10 ? ' active' : '');
-
-                btn.textContent = `Episode ${i}`;
-
-                btn.setAttribute('data-episode', i);
-
-                btn.onclick = () => loadEpisode(i);
-
-                container.appendChild(btn);
-
             }
 
-            
-
-            // Initialize quality buttons
-
-            document.querySelectorAll('.quality-btn').forEach(btn => {
-
-                btn.onclick = () => changeQuality(btn.getAttribute('data-quality'));
-
-            });
-
-        }
+        };
 
         
-
+        let currentEpisode = 10; // Default to Episode 8
+        let currentQuality = '720p'; // Default quality
+        
+        function changeQuality(quality) {
+            currentQuality = quality;
+            
+            // Update video player
+            const episode = episodes[currentEpisode];
+            document.getElementById('videoSource').src = episode.videoUrls[quality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update active button
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-quality="${quality}"]`).classList.add('active');
+        }
+        
+        function loadEpisode(episodeNum) {
+            const episode = episodes[episodeNum];
+            if (!episode) return;
+            
+            currentEpisode = episodeNum;
+            
+            // Update video player
+            document.getElementById('videoSource').src = episode.videoUrls[currentQuality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update episode info
+            document.getElementById('episodeNumber').textContent = episodeNum;
+            document.getElementById('episodeTitle').textContent = episode.title.split(' - ')[1];
+            document.getElementById('episodeDescription').textContent = episode.description;
+            
+            // Update active button
+            document.querySelectorAll('.episode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-episode="${episodeNum}"]`).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function initializeEpisodes() {
+            const container = document.getElementById('episodesContainer');
+            
+            for (let i = 1; i <= 10; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'episode-btn' + (i === 10 ? ' active' : '');
+                btn.textContent = `Episode ${i}`;
+                btn.setAttribute('data-episode', i);
+                btn.onclick = () => loadEpisode(i);
+                container.appendChild(btn);
+            }
+            
+            // Initialize quality buttons
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.onclick = () => changeQuality(btn.getAttribute('data-quality'));
+            });
+        }
+        
         // Initialize on page load
-
         document.addEventListener('DOMContentLoaded', () => {
-
             initializeEpisodes();
-
             loadEpisode(10); // Load Episode 10 by default
-
         });
-
     </script>
-
 </body>
-
 </html>
