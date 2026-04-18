@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>the art of sarah - Drama Video Player</title>
+    <title>The Art of Sarah - Drama Video Player</title>
     <style>
         * {
             margin: 0;
@@ -134,8 +134,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1> THE ART OF SARAH</h1>
-            <p>K-Drama Series | Watch All Episodes</p>
+            <h1>The Art of Sarah</h1>
+            <p>Drama Series | Watch All Episodes</p>
         </div>
         
         <div class="video-container">
@@ -147,7 +147,8 @@
         
         <div class="quality-container">
             <h3>Select Quality:</h3>
-            <button class="quality-btn active" data-quality="720p">720p</button>
+            <button class="quality-btn" data-quality="480p">480p</button>
+            <button class="quality-btn" data-quality="720p">720p</button>
             <button class="quality-btn" data-quality="1080p">1080p</button>
         </div>
         
@@ -161,76 +162,85 @@
     </div>
     
     <script>
-        const episodes = {
+         const episodes = {
             1: {
                 title: "Episode 1 - The Beginning",
                 description: "Gun-woo puts his mother's safety first; Hong Woo-jin turns to an old friend for help; but Baek-jeong's men soon catch up after tailing their every move.",
                 videoUrls: {
-                    '720p': "https://hub.hailmary.lat/ad4f4776322de71825315d46f9b943bb?token=1775910021150",
-                    '1080p': "https://hub.hailmary.lat/f23f207698e51e914bc5af13acf89607?token=1775910046150"
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0ddde4fe93d618cd05f07a326e52dcbe/The.Art.Of.Sarah.S01E01.Jane.Doe.480p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/558ac6c6770aa0a39019f2cbd5cb9ff4/The.Art.Of.Sarah.S01E01.Jane.Doe.720p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/d0b04c22759658c0ece4cd41a364ec1e/The.Art.of.Sarah.S01E01.Jane.Doe.1080p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv"
                 }
             },
             2: {
                 title: "Episode 2 - Secrets Unveiled",
                 description: "Hidden secrets start to surface as investigations deepen.",
                 videoUrls: {
-                    '720p': "https://hub.hailmary.lat/eb506b76fde96cbf6a13c55fc099f263?token=1775910068151",
-                    '1080p': "https://hub.hailmary.lat/8953310f39a1dda05388f87708dd087a?token=1775910195153"
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/aeb7dd90ddd7913ea941a1f252623780/The.Art.Of.Sarah.S01E02.Sarah.Kim.480p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/ec5102df2922645818ee51a913bbc00b/The.Art.Of.Sarah.S01E02.Sarah.Kim.720p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/91c1dbba6b8dd0f4d9ab9b7858ab3b7e/The.Art.of.Sarah.S01E02.Sarah.Kim.1080p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv"
                 }
             },
             3: {
                 title: "Episode 3 - The Hunt",
                 description: "The search intensifies with new clues and suspects.",
                 videoUrls: {
-                    '720p': "https://hub.hailmary.lat/b2f05379abff3e1d096572ee2542ea1e?token=1775910223153",
-                    '1080p': "https://hub.hailmary.lat/ef98123c00b1c32a32f9d875f3f41f64?token=1775910245154"
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/8ed2678afec7f5cfd61424aa3c366b06/The.Art.Of.Sarah.S01E03.Mok.Ga-Hui.480p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/a49ee284cefb8d15a1ff945cff3f2ffa/The.Art.Of.Sarah.S01E03.Mok.Ga-Hui.720p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/8e89fc903dfb1b9e804d27dcea5b35ee/The.Art.of.Sarah.S01E03.Mok.Ga-hui.1080p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv"
                 }
             },
             4: {
                 title: "Episode 4 - Betrayal",
                 description: "Trust is shattered as betrayal comes from an unexpected source.",
                 videoUrls: {
-                    '720p': "https://hub.hailmary.lat/5cc595ee4785900810edc6ab1ef2fe62?token=1775910272154",
-                    '1080p': "https://hub.hailmary.lat/49d7d71388b2d2139ed0d0643b214d66?token=1775910298154"
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/927015f80730b3f1ecc868b844777330/The.Art.Of.Sarah.S01E04.Kim.Eun-Jae.480p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/6db75eac36bc5295ad4a3128ae55598d/The.Art.Of.Sarah.S01E04.Kim.Eun-Jae.720p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/6123dfe3fa1f918129c3244a72829837/The.Art.of.Sarah.S01E04.Kim.Eun-jae.1080p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv"
                 }
             },
             5: {
                 title: "Episode 5 - Breakthrough",
                 description: "A major breakthrough brings new leads and complications.",
                 videoUrls: {
-                    '720p': "https://hub.hailmary.lat/8039df7627a0e6cf010fc3fa0505b043?token=1775910332155",
-                    '1080p': "https://hub.hailmary.lat/86792a6d4d9af32044a956affc40913f?token=1775910356155"
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/1d0372f8c606680b9ee9a4cc90a733fd/The.Art.Of.Sarah.S01E05.Boudoir.480p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/29ad34719b226c80a9b73936ef49a85b/The.Art.Of.Sarah.S01E05.Boudoir.720p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0a7728a2e401ac752a8753c128a4a4b3/The.Art.of.Sarah.S01E05.Boudoir.1080p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv"
                 }
             },
             6: {
                 title: "Episode 6 - The Trap",
                 description: "Our heroes fall into a dangerous trap set by the antagonist.",
                 videoUrls: {
-                    '720p': "https://hub.hailmary.lat/273d4613b64f48949d9c693d91baaa2e?token=1775910378156",
-                    '1080p': "https://hub.hailmary.lat/d9ef117151ace6d81dfa461d93210cf8?token=1775910406156"
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/48a2cab46a809b8dc990a0ed4b1105aa/The.Art.Of.Sarah.S01E06.Unregistered.Person.480p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/40a7b64c1ec5a4832c8d0c0ea601667a/The.Art.Of.Sarah.S01E06.Unregistered.Person.720p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/593295c7ae387ad5fd1fd5697fe0092b/The.Art.of.Sarah.S01E06.Unregistered.Person.1080p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv"
                 }
             },
             7: {
                 title: "Episode 7 - Escape",
                 description: "A daring escape attempt puts everything on the line.",
                 videoUrls: {
-                    '720p': "https://hub.hailmary.lat/db3f4b8837e9debe052df8f2c497c54f?token=1775910433157",
-                    '1080p': "https://hub.hailmary.lat/27ccc1071c2d594d2e1b8b2b20b2f1ef?token=1775910458157"
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/52007fbad184dcf7dcebf8eb91399421/The.Art.Of.Sarah.S01E07.Kim.Mi-Jeong.480p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/b3d2e370bbf12c033b8205553f62d08e/The.Art.Of.Sarah.S01E07.Kim.Mi-Jeong.720p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/01244928198b5920bd626f8c9912997b/The.Art.of.Sarah.S01E07.Kim.Mi-jeong.1080p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv"
                 }
             },
              8: {
                 title: "Episode 8 - Revelation",
                 description: "Dark secrets are revealed, changing everything.",
                 videoUrls: {
-                    '720p': "https://hub.hailmary.lat/cfeefbed9277df400e6b4a2a62386f87?token=1775910522158",
-                    '1080p': "https://hub.hailmary.lat/55ff98184da9fee73b33cb25968c7297?token=1775910551159"
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/f0735b173d47b41b0a4eb0952c7f41a7/The.Art.Of.Sarah.S01E08.The.Art.Of.Sarah.480p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/97eef5002cd7073a17f4e38a9f673a08/The.Art.Of.Sarah.S01E08.The.Art.Of.Sarah.720p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/f56b4e63486c07f720d13c22849b9195/The.Art.of.Sarah.S01E08.The.Art.of.Sarah.1080p.x264.Hindi.Korean.English.Msubs.MoviesMod.org.mkv"
                 }
             },
 
         };
+
         
         let currentEpisode = 8; // Default to Episode 8
-        let currentQuality = '480p'; // Default quality
+        let currentQuality = '720p'; // Default quality
         
         function changeQuality(quality) {
             currentQuality = quality;
@@ -277,7 +287,7 @@
             
             for (let i = 1; i <= 8; i++) {
                 const btn = document.createElement('button');
-                btn.className = 'episode-btn' + (i === 9 ? ' active' : '');
+                btn.className = 'episode-btn' + (i === 8 ? ' active' : '');
                 btn.textContent = `Episode ${i}`;
                 btn.setAttribute('data-episode', i);
                 btn.onclick = () => loadEpisode(i);
