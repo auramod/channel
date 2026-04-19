@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Border 2 - Movie Player</title>
+    <style>
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000000;
+            color: #2e2e2e;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #eeeef1;
+        }
+        
+        .header p {
+            color: #38383a;
+            font-size: 1.1em;
+        }
+        
+        .video-container {
+            background: #5e5c5c;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 0px 20px rgba(145, 141, 141, 0.5);
+        }
+        
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+        
+        .movie-info {
+            background: #393838;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 20px;
+        }
+        
+        .movie-info h2 {
+            margin-bottom: 10px;
+            color: #fefdff;
+        }
+        
+        .movie-info p {
+            color: #6d6b6b;
+            margin-bottom: 8px;
+        }
+        
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .movie-btn {
+            padding: 12px 20px;
+            background: #464545;
+            border: 2px solid #4d4c4c;
+            color: #fafaff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1em;
+            text-align: center;
+        }
+        
+        .movie-btn:hover {
+            background: #000000;
+            border-color: #efecff;
+            transform: translateY(-2px);
+        }
+        
+        .movie-btn.active {
+            background: #000000;
+            border-color: #686565;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+        }
+        
+        .quality-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .quality-container h3 {
+            color: #f7f4ff;
+            margin-bottom: 20px;
+        }
+        
+        .quality-btn {
+            padding: 10px 15px;
+            background: #333232;
+            border: 4px solid #2f2d2d;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+            margin: 0 5px;
+        }
+        
+        .quality-btn:hover {
+            background: #000000;
+            border-color: #000000;
+            transform: translateY(-2px);
+        }
+        
+        .quality-btn.active {
+            background: #000000;
+            border-color: #000000;
+            box-shadow: 0 0 15px rgba(232, 230, 230, 0.5);
+        }
+        
+        .description {
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+            margin-top: 20px;
+            color: #aaa;
+        }
+        
+        .description h3 {
+            color: #f4f3f5;
+            margin-bottom: 10px;
+        }
+
+        .movies-label {
+            color: #fdfcff;
+            font-size: 1.2em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>BORDER 2</h1>
+            <p>movie</p>
+        </div>
+        
+        <div class="video-container">
+            <video class="video-player" id="videoPlayer" controls>
+                <source id="videoSource" src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="quality-container">
+            <h3>Select Quality:</h3>
+            <button class="quality-btn active" data-quality="480p">480p</button>
+            <button class="quality-btn" data-quality="720p">720p</button>
+            <button class="quality-btn" data-quality="1080p">1080p</button>
+        </div>
+        
+        <div class="movie-info">
+            <h2><span id="movieTitle">Loading...</span></h2>
+            <p><strong>Year:</strong> <span id="movieYear">-</span></p>
+        </div>
+        
+        <div class="movies-label"> Movie:</div>
+        <div class="movies-grid" id="moviesContainer"></div>
+    </div>
+    
+    <script>
+        const movies = {
+            1: {
+                title: "Border 2",
+                year: "2026",
+                description: "Greed and class discrimination threaten the newly formed symbiotic relationship between the wealthy Park family and the destitute Kim clan.",
+                videoUrls: {
+                    '480p': "https://hub.mayhem.buzz/1a90937a80f9e4f620ff2a2ff10783d9",
+                    '720p': "https://hub.mayhem.buzz/838e54618d9ecb482b26620c19fa8c5c?token=1775376334",
+                    '1080p': "https://hub.mayhem.buzz/f7b37f70188c34a7479d4511296c723b?token=1775381055"
+                }
+            }
+        };
+        
+        let currentMovie = 1;
+        let currentQuality = '480p'; // Default quality
+        
+        function changeQuality(quality) {
+            currentQuality = quality;
+            
+            // Update video player
+            const movie = movies[currentMovie];
+            if (movie && movie.videoUrls[quality]) {
+                document.getElementById('videoSource').src = movie.videoUrls[quality];
+                document.getElementById('videoPlayer').load();
+            }
+            
+            // Update active button
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-quality="${quality}"]`).classList.add('active');
+        }
+        
+        function loadMovie(movieNum) {
+            const movie = movies[movieNum];
+            if (!movie) return;
+            
+            currentMovie = movieNum;
+            
+            // Update video player
+            if (movie.videoUrls[currentQuality]) {
+                document.getElementById('videoSource').src = movie.videoUrls[currentQuality];
+                document.getElementById('videoPlayer').load();
+            }
+            
+            // Update movie info
+            document.getElementById('movieTitle').textContent = movie.title;
+            document.getElementById('movieYear').textContent = movie.year;
+            document.getElementById('movieGenre').textContent = movie.genre;
+            document.getElementById('movieRating').textContent = movie.rating;
+            document.getElementById('movieDescription').textContent = movie.description;
+            
+            // Update active button
+            document.querySelectorAll('.movie-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-movie="${movieNum}"]`).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function initializeMovies() {
+            const container = document.getElementById('moviesContainer');
+            
+            for (let i = 1; i <= 1; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'movie-btn' + (i === 1 ? ' active' : '');
+                btn.textContent = `${movies[i].title}`;
+                btn.setAttribute('data-movie', i);
+                btn.onclick = () => loadMovie(i);
+                container.appendChild(btn);
+            }
+            
+            // Initialize quality buttons
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.onclick = () => changeQuality(btn.getAttribute('data-quality'));
+            });
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeMovies();
+            loadMovie(1); // Load first movie by default
+        });
+    </script>
+</body>
+</html>
