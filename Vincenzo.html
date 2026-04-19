@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vincenzo - Drama Video Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000000;
+            color: #525254;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        
+        .video-container {
+            background: #373636;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 0px 20px rgba(187, 187, 187, 0.5);
+        }
+        
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+        
+        .episode-info {
+            background: #353535;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+        
+        .episode-info h2 {
+            margin-bottom: 10px;
+            color: #929195;
+        }
+        
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .episode-btn {
+            padding: 12px 20px;
+            background: #3f3e3e;
+            border: 2px solid #a3a0a0;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1em;
+        }
+        
+        .episode-btn:hover {
+            background: #000000;
+            border-color: #5b5b5d;
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(167, 166, 166, 0.5);
+        }
+        
+        .episode-btn.active {
+            background: #000000;
+            border-color: #424141;
+            box-shadow: 0 0 15px rgba(167, 166, 166, 0.5);
+        }
+        
+        .quality-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .quality-btn {
+            padding: 10px 15px;
+            background: #373636;
+            border: 2px solid #363636;
+            color: #f7f7ff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+            margin: 0 5px;
+        }
+        
+        .quality-btn:hover {
+            background: #000000;
+            border-color: #000000;
+            transform: translateY(-2px);
+        }
+        
+        .quality-btn.active {
+            background: #000000;
+            border-color: #464545;
+            box-shadow: 0 0 15px rgba(249, 245, 245, 0.5);
+        }
+        
+        .description {
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Vincenzo</h1>
+            <p>Drama Series | Watch All Episodes</p>
+        </div>
+        
+        <div class="video-container">
+            <video class="video-player" id="videoPlayer" controls>
+                <source id="videoSource" src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="quality-container">
+            <h3>Select Quality:</h3>
+            <button class="quality-btn" data-quality="480p">480p</button>
+            <button class="quality-btn" data-quality="720p">720p</button>
+        </div>
+        
+        <div class="episode-info">
+            <h2>Episode <span id="episodeNumber">20</span>
+        </div>
+        
+        <h3 style="margin-top: 40px; margin-bottom: 20px;">Select Episode:</h3>
+        <div class="episodes-grid" id="episodesContainer"></div>
+    </div>
+    
+    <script>
+         const episodes = {
+            1: {
+                title: "Episode 1 - The Beginning",
+                description: "Gun-woo puts his mother's safety first; Hong Woo-jin turns to an old friend for help; but Baek-jeong's men soon catch up after tailing their every move.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/ba8bcb7a76fd91e269f247879e5176ea/Vincenzo.A.K.A.Binsenjo.S01e01.480p.Hindi.Korean.English.Esubs.MoviesMod.com.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/ced153522d645a5441b18e7178ad7a88/Vincenzo.S01E01.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/a2c61fa123dcd002dd2188ed34b734d8/Vincenzo.S01E01.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            2: {
+                title: "Episode 2 - Secrets Unveiled",
+                description: "Hidden secrets start to surface as investigations deepen.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/f6586f663cf3a2dd4d7039bf7d4f3cd4/Vincenzo.A.K.A.Binsenjo.S01e02.480p.Hindi.Korean.English.Esubs.MoviesMod.com.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/ba691532fa39c9ba5df11e2852c8d8d7/Vincenzo.S01E02.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/a77689610a0da851ac54fc38e39f5435/Vincenzo.S01E02.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            3: {
+                title: "Episode 3 - The Hunt",
+                description: "The search intensifies with new clues and suspects.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0a8e6855af1b357bb4547dd058020f70/Vincenzo.A.K.A.Binsenjo.S01e03.480p.Hindi.Korean.English.Esubs.MoviesMod.com.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/4c0d81682fd50953d1646bcc0a1e227f/Vincenzo.S01E03.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/baa04b5979a24c4cc606cde2d855aac4/Vincenzo.S01E03.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            4: {
+                title: "Episode 4 - Betrayal",
+                description: "Trust is shattered as betrayal comes from an unexpected source.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/c44fe3752a169b8b6045770eae8f341c/Vincenzo.A.K.A.Binsenjo.S01e04.480p.Hindi.Korean.English.Esubs.MoviesMod.com.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/9f923257490272b849b98bcbbad17f60/Vincenzo.S01E04.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/b6af7c310f3e4abb421f0f868214329e/Vincenzo.S01E04.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            5: {
+                title: "Episode 5 - Breakthrough",
+                description: "A major breakthrough brings new leads and complications.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/e8e64822a2cd59df8730b12baf1bb5fd/Vincenzo.A.K.A.Binsenjo.S01e05.480p.Hindi.Korean.English.Esubs.MoviesMod.com.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0708371a452285d258f54b81cd148be9/Vincenzo.S01E05.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/e036db35205801a6b8e1c8d0940f4b17/Vincenzo.S01E05.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            6: {
+                title: "Episode 6 - The Trap",
+                description: "Our heroes fall into a dangerous trap set by the antagonist.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/62ae76ece596900134c91a0e554bb4ce/Vincenzo.A.K.A.Binsenjo.S01e06.480p.Hindi.Korean.English.Esubs.MoviesMod.com.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/7efdc472cb13907fa72a911dd4dc669d/Vincenzo.S01E06.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/8ccd8ea0308887a70cb4c5fa9735b051/Vincenzo.S01E06.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            7: {
+                title: "Episode 7 - Escape",
+                description: "A daring escape attempt puts everything on the line.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/2890532a860879c035235f649c4cb09b/Vincenzo.A.K.A.Binsenjo.S01e07.480p.Hindi.Korean.English.Esubs.MoviesMod.com.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/f8a16d88e9301b212bbe6b2ca7f69726/Vincenzo.S01E07.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0d0a613c97522946a3ec814db6d7f170/Vincenzo.S01E07.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+             8: {
+                title: "Episode 8 - Revelation",
+                description: "Dark secrets are revealed, changing everything.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/cdda5a3211fabd62fe54820b6025632a/Vincenzo.A.K.A.Binsenjo.S01e08.480p.Hindi.Korean.English.Esubs.MoviesMod.com.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/6d63ddec11a29cde6c3a15f6200c9dfd/Vincenzo.S01E08.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/9c13b9e9057f6fcd063a65fd4c71fedf/Vincenzo.S01E08.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            9: {
+                title: "Episode 9 - Confrontation",
+                description: "The final confrontation between good and evil unfolds.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/23328df77e9cf45db2a4530abd63711b/Vincenzo.A.K.A.Binsenjo.S01e09.480p.Hindi.Korean.English.Esubs.MoviesMod.com.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0d726220c2083a0a04ab02ed42ecaae9/Vincenzo.S01E09.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/9626c17cf09ce560eddcc7a01436c9db/Vincenzo.S01E09.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            10: {
+                title: "Episode 10 - The Endgame",
+                description: "The thrilling conclusion to the series.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/b1fc1ab527a196202a7dd0afb75ab2ee/Vincenzo.A.K.A.Binsenjo.S01e10.480p.Hindi.Korean.English.Esubs.MoviesMod.com..mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0e2d3111e1a54f0f9a3e221e92837131/Vincenzo.S01E10.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/6b2cfe9fa1a87f3326836951e2f447f3/Vincenzo.S01E10.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            11: {
+                title: "Episode 11 - New Beginnings",
+                description: "A new chapter begins with unexpected twists.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/1aba1854120bf8f793bb1c45ac48b76f/Vincenzo.A.K.A.Binsenjo.S01e11.480p.Hindi.Korean.English.Esubs.MoviesMod.com..mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/948e1eec089f0eb585e0bfbb7a904314/Vincenzo.S01E11.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/dafa6a2cb3a0c267ff54a144be99f787/Vincenzo.S01E11.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            12: {
+                title: "Episode 12 - The Aftermath",
+                description: "The aftermath of the final battle brings new challenges.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0f6151556280c18c48fe66d15249f4e0/Vincenzo.A.K.A.Binsenjo.S01e12.480p.Hindi.Korean.English.Esubs.MoviesMod.com..mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/d0e51c7094d9274dfa0170bbd6ef33d0/Vincenzo.S01E12.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/cecd09f5804ed8ac4b647fbc33348743/Vincenzo.S01E12.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            13: {
+                title: "Episode 13 - Redemption",
+                description: "Characters seek redemption for past actions.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/6827910135e0f6c98b16884b45e7f44f/Vincenzo.A.K.A.Binsenjo.S01e13.480p.Hindi.Korean.English.Esubs.MoviesMod.com..mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/33c2c3f092f1e0869d60dacf556b3c5a/Vincenzo.S01E13.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/1655227858d11beec368aaa91b3ad0d7/Vincenzo.S01E13.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            14: {
+                title: "Episode 14 - The Return",
+                description: "A character returns with a shocking revelation.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/722fa0e23855345bdb5ce4e35e492913/Vincenzo.A.K.A.Binsenjo.S01e14.480p.Hindi.Korean.English.Esubs.MoviesMod.com..mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/795f6c2bb5a09ee459a7528a70bb5b3f/Vincenzo.S01E14.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/9ff73d50dbd7d50619ad18bb4ea15f42/Vincenzo.S01E14.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            15: {
+                title: "Episode 15 - The Secret",
+                description: "A long-hidden secret is finally uncovered.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/38a889309ef25f2ab4d46377e4a9b500/Vincenzo.A.K.A.Binsenjo.S01e15.480p.Hindi.Korean.English.Esubs.MoviesMod.com..mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/cd352250fe87e16839c86250319c6f1a/Vincenzo.S01E15.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/06f067c637bedfe022379a023185a7f4/Vincenzo.S01E15.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            16: {
+                title: "Episode 16 - The Chase",
+                description: "A high-stakes chase through the city ensues.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/82103212d0f6027308cf6971579ff692/Vincenzo.A.K.A.Binsenjo.S01e16.480p.Hindi.Korean.English.Esubs.MoviesMod.com..mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/6b02fd650195468290d25c32829bc401/Vincenzo.S01E16.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/c9da56dee4cd4c8c731d742a56d82151/Vincenzo.S01E16.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            17: {
+                title: "Episode 17 - The Betrayal",
+                description: "A close ally betrays the main characters, leading to dire consequences.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0db5128564f2d045c831ac6d3ec79cc3/Vincenzo.A.K.A.Binsenjo.S01e17.480p.Hindi.Korean.English.Esubs.MoviesMod.com..mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/c07e5091b9a21307e41f7f0ffd793652/Vincenzo.S01E17.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/abdbf6a806e81cd5034b27e03a1a7858/Vincenzo.S01E17.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            18: {
+                title: "Episode 18 - The Alliance",
+                description: "Former enemies form an uneasy alliance to face a common threat.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/ca4eb90cb9bbbdf14256f25434fca3b6/Vincenzo.A.K.A.Binsenjo.S01e18.480p.Hindi.Korean.English.Esubs.MoviesMod.com..mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/d2ea0500c1b1f87a0768bbecc061e976/Vincenzo.S01E18.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/fb9eb07c7126e3a8b69b20e95fbec606/Vincenzo.S01E18.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            19: {
+                title: "Episode 19 - The Revelation",
+                description: "A shocking revelation changes the course of the story.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/b8f71a17f5ad166f7ff8cdcc19321970/Vincenzo.A.K.A.Binsenjo.S01e19.480p.Hindi.Korean.English.Esubs.MoviesMod.com..mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/6f4fd38b22e402c2e99fa478aa2f9e1f/Vincenzo.S01E19.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0962afde078be32e7f40c8286ba89777/Vincenzo.S01E19.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            20: {
+                title: "Episode 20 - The Final Battle",
+                description: "The ultimate battle between good and evil takes place.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/5743d32f7be092f7c66c60a434b18ed5/Vincenzo.A.K.A.Binsenjo.S01e20.480p.Hindi.Korean.English.Esubs.MoviesMod.com..mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/8887baee8f76a2d8a3c0306157ab2704/Vincenzo.S01E20.720p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/2a60e3980998bd7cbb514f8480a08ae6/Vincenzo.S01E20.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+
+        };
+
+        
+        let currentEpisode = 20; // Default to Episode 20
+        let currentQuality = '480p'; // Default quality
+        
+        function changeQuality(quality) {
+            currentQuality = quality;
+            
+            // Update video player
+            const episode = episodes[currentEpisode];
+            document.getElementById('videoSource').src = episode.videoUrls[quality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update active button
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-quality="${quality}"]`).classList.add('active');
+        }
+        
+        function loadEpisode(episodeNum) {
+            const episode = episodes[episodeNum];
+            if (!episode) return;
+            
+            currentEpisode = episodeNum;
+            
+            // Update video player
+            document.getElementById('videoSource').src = episode.videoUrls[currentQuality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update episode info
+            document.getElementById('episodeNumber').textContent = episodeNum;
+            document.getElementById('episodeTitle').textContent = episode.title.split(' - ')[1];
+            document.getElementById('episodeDescription').textContent = episode.description;
+            
+            // Update active button
+            document.querySelectorAll('.episode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-episode="${episodeNum}"]`).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function initializeEpisodes() {
+            const container = document.getElementById('episodesContainer');
+            
+            for (let i = 1; i <= 20; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'episode-btn' + (i === 20 ? ' active' : '');
+                btn.textContent = `Episode ${i}`;
+                btn.setAttribute('data-episode', i);
+                btn.onclick = () => loadEpisode(i);
+                container.appendChild(btn);
+            }
+            
+            // Initialize quality buttons
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.onclick = () => changeQuality(btn.getAttribute('data-quality'));
+            });
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeEpisodes();
+            loadEpisode(20); // Load Episode 20 by default
+        });
+    </script>
+</body>
+</html>
