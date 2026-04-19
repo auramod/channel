@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unforgettable Love - Drama Video Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000000;
+            color: #525254;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        
+        .video-container {
+            background: #373636;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 0px 20px rgba(187, 187, 187, 0.5);
+        }
+        
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+        
+        .episode-info {
+            background: #353535;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+        
+        .episode-info h2 {
+            margin-bottom: 10px;
+            color: #929195;
+        }
+        
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .episode-btn {
+            padding: 12px 20px;
+            background: #3f3e3e;
+            border: 2px solid #a3a0a0;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1em;
+        }
+        
+        .episode-btn:hover {
+            background: #000000;
+            border-color: #5b5b5d;
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(167, 166, 166, 0.5);
+        }
+        
+        .episode-btn.active {
+            background: #000000;
+            border-color: #424141;
+            box-shadow: 0 0 15px rgba(167, 166, 166, 0.5);
+        }
+        
+        .quality-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .quality-btn {
+            padding: 10px 15px;
+            background: #373636;
+            border: 2px solid #363636;
+            color: #f7f7ff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+            margin: 0 5px;
+        }
+        
+        .quality-btn:hover {
+            background: #000000;
+            border-color: #000000;
+            transform: translateY(-2px);
+        }
+        
+        .quality-btn.active {
+            background: #000000;
+            border-color: #464545;
+            box-shadow: 0 0 15px rgba(249, 245, 245, 0.5);
+        }
+        
+        .description {
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Unforgettable Love </h1>
+            <p>Drama Series | Watch All Episodes</p>
+        </div>
+        
+        <div class="video-container">
+            <video class="video-player" id="videoPlayer" controls>
+                <source id="videoSource" src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="quality-container">
+            <h3>Select Quality:</h3>
+            <button class="quality-btn" data-quality="480p">480p</button>
+            <button class="quality-btn" data-quality="720p">720p</button>
+            <button class="quality-btn" data-quality="1080p">1080p</button>
+        </div>
+        
+        <div class="episode-info">
+            <h2>Episode <span id="episodeNumber">24</span>
+        </div>
+        
+        <h3 style="margin-top: 40px; margin-bottom: 20px;">Select Episode:</h3>
+        <div class="episodes-grid" id="episodesContainer"></div>
+    </div>
+    
+    <script>
+         const episodes = {
+            1: {
+                title: "Episode 1 - The Beginning",
+                description: "Gun-woo puts his mother's safety first; Hong Woo-jin turns to an old friend for help; but Baek-jeong's men soon catch up after tailing their every move.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/13f5567d8a0e34fa0284a991896a5881/Unforgettable.Love.S01E01.Contract.To.Heal.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/e07be75b29dd608a7ea1d2ea25d0e545/Unforgettable.Love.S01E01.Contract.To.Heal.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/13528b7773e0f99b8016e60c33cbca7e/Unforgettable.Love.S01E01.Contract.To.Heal.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            2: {
+                title: "Episode 2 - Secrets Unveiled",
+                description: "Hidden secrets start to surface as investigations deepen.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/34a2a2add18fa74916cf6784ca6fb37e/Unforgettable.Love.S01E02.Shy.Connections.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/37ed44db3a3bc7a142d6ce8470ceb604/Unforgettable.Love.S01E02.Shy.Connections.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/77ebf03216b8b0c82fb44682ecae45a0/Unforgettable.Love.S01E02.Shy.Connections.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            3: {
+                title: "Episode 3 - The Hunt",
+                description: "The search intensifies with new clues and suspects.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/ae1b029fbfe65a7521e09980114d223e/Unforgettable.Love.S01E03.Stirring.Feelings.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0c0fe870c158610e139adf015cfdc56a/Unforgettable.Love.S01E03.Stirring.Feelings.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/1fcfcada314dd58c495b4c99af03c8f5/Unforgettable.Love.S01E03.Stirring.Feelings.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            4: {
+                title: "Episode 4 - Betrayal",
+                description: "Trust is shattered as betrayal comes from an unexpected source.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/95ec4c6fecd5f56a7b14d55bd7e4d746/Unforgettable.Love.S01E04.Shadowed.Past.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/86945c2d23f6d5e1d4222260b47ad089/Unforgettable.Love.S01E04.Shadowed.Past.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/13657c8c655dc275842c244565d5e16f/Unforgettable.Love.S01E04.Shadowed.Past.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            5: {
+                title: "Episode 5 - Breakthrough",
+                description: "A major breakthrough brings new leads and complications.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/35ee891c64c87c8dce30427808f2cc4e/Unforgettable.Love.S01E05.Aunts.Opposition.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/b695569d7c3f5faa857ae1783b18746a/Unforgettable.Love.S01E05.Aunts.Opposition.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/ae2e5f008afb6eacbd330e5c9933204e/Unforgettable.Love.S01E05.Aunts.Opposition.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            6: {
+                title: "Episode 6 - The Trap",
+                description: "Our heroes fall into a dangerous trap set by the antagonist.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/91c34802fd4a5a8aef6e23eb81e46cef/Unforgettable.Love.S01E06.Dual.Lives.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/966442ff08193337b8c370338c34247c/Unforgettable.Love.S01E06.Dual.Lives.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/1e3ad9474d1934649055b6efd7b938d8/Unforgettable.Love.S01E06.Dual.Lives.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            7: {
+                title: "Episode 7 - Escape",
+                description: "A daring escape attempt puts everything on the line.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/19056ad2e794bb81109bc60ccb8e460d/Unforgettable.Love.S01E07.Cracks.In.Armor.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/861b5365e622b652881eb352b8588d71/Unforgettable.Love.S01E07.Cracks.In.Armor.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/e2a7c8c823d22d5dd45642166fdcbba4/Unforgettable.Love.S01E07.Cracks.In.Armor.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+             8: {
+                title: "Episode 8 - Revelation",
+                description: "Dark secrets are revealed, changing everything.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/90cabc9eee206142f9ecd0aad987ef34/Unforgettable.Love.S01E08.Warmth.And.Boundaries.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/2dbb245741c1c1ff4d48645974b7c822/Unforgettable.Love.S01E08.Warmth.And.Boundaries.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/fdad10ea47254f6aeb6d44298c60dab1/Unforgettable.Love.S01E08.Warmth.And.Boundaries.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            9: {
+                title: "Episode 9 - Confrontation",
+                description: "The final confrontation between good and evil unfolds.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/21fbebaa83659f9ea68f1177a3a992e3/Unforgettable.Love.S01E09.Trust.In.Practice.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/066ddf67574c281cafebf732fdb3291c/Unforgettable.Love.S01E09.Trust.In.Practice.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/377b4775562dbe1e3858660fa1d25cfd/Unforgettable.Love.S01E09.Trust.In.Practice.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            10: {
+                title: "Episode 10 - The Endgame",
+                description: "The thrilling conclusion to the series.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/ec79b12a846560e057af797865d98b45/Unforgettable.Love.S01E10.Bonding.Moment.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/23775c4d7cda27567203000eca4740af/Unforgettable.Love.S01E10.Bonding.Moment.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0e595f92e5f12c000065a50148490824/Unforgettable.Love.S01E10.Bonding.Moment.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            11: {
+                title: "Episode 11 - New Beginnings",
+                description: "A new chapter begins with unexpected twists.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/2a7549fa02640455cefb051886771f51/Unforgettable.Love.S01E11.Outside.Opinions.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/be59e041d3bbad6afc518c0f59b93d77/Unforgettable.Love.S01E11.Outside.Opinions.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/361589e777b6942ce037d16b9c9ddef5/Unforgettable.Love.S01E11.Outside.Opinions.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            12: {
+                title: "Episode 12 - The Aftermath",
+                description: "The aftermath of the final battle brings new challenges.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/523852f52bf5c7b773ae5beb9262e1b7/Unforgettable.Love.S01E12.Signs.Of.Love.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/444cfd82466d279413ba0ff8b419e725/Unforgettable.Love.S01E12.Signs.Of.Love.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/eb5074a239f7d37a50143beaa92794fc/Unforgettable.Love.S01E12.Signs.Of.Love.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            13: {
+                title: "Episode 13 - Redemption",
+                description: "Characters seek redemption for past actions.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/2d7e5c2a87cc459a66c68be64b33747e/Unforgettable.Love.S01E13.Confronting.Reality.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/d2fdf353dae2b959c696e681654debe1/Unforgettable.Love.S01E13.Confronting.Reality.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/bd3cdf41f6d5012b0cac88f2775b9840/Unforgettable.Love.S01E13.Confronting.Reality.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            14: {
+                title: "Episode 14 - The Return",
+                description: "A character returns with a shocking revelation.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/4a4552b67a6c00773be02afd6f09af0d/Unforgettable.Love.S01E14.Turning.Point.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/306812e35c44c0d128e8130aa39c168a/Unforgettable.Love.S01E14.Turning.Point.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/24e36f12f530324b66eda4ff0006ce74/Unforgettable.Love.S01E14.Turning.Point.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            15: {
+                title: "Episode 15 - The Secret",
+                description: "A long-hidden secret is finally uncovered.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/7df16908ab275cad0a4b3684d2711798/Unforgettable.Love.S01E15.Truths.Revealed.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/2cde173e2a9a5eda5650a8740ba36b5c/Unforgettable.Love.S01E15.Truths.Revealed.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/502180934c0c3a2853e397b089062f06/Unforgettable.Love.S01E15.Truths.Revealed.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            16: {
+                title: "Episode 16 - The Chase",
+                description: "A high-stakes chase through the city ensues.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/3535755c591dc7f6a4bb459d298b7b36/Unforgettable.Love.S01E16.Heartfelt.Apology.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/f7893258270630bbfd97d13086c82291/Unforgettable.Love.S01E16.Heartfelt.Apology.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/3341cf63b8bda7c5a0fc352ef0b31d72/Unforgettable.Love.S01E16.Heartfelt.Apology.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            17: {
+                title: "Episode 17 - The Betrayal",
+                description: "A close ally betrays the main characters, leading to dire consequences.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/d3cfd889293f5beaae80bf68c6d1f8ab/Unforgettable.Love.S01E17.Public.Perception.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/3462c25af1a684d48a2d5b1115fff689/Unforgettable.Love.S01E17.Public.Perception.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/8754928fbfa28a543fddd4e108988439/Unforgettable.Love.S01E17.Public.Perception.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            18: {
+                title: "Episode 18 - The Alliance",
+                description: "Former enemies form an uneasy alliance to face a common threat.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/b2dd1ce6482f4291c8f73cac471b3f47/Unforgettable.Love.S01E18.Love.Confirmed.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/5553abd398f6f62973ad56d2fd255883/Unforgettable.Love.S01E18.Love.Confirmed.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/d1c3abd735dc7f19eac3e5dbf3e45c3f/Unforgettable.Love.S01E18.Love.Confirmed.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            19: {
+                title: "Episode 19 - The Revelation",
+                description: "A shocking revelation changes the course of the story.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0570d4b0c823153d7427b5b6add72dd2/Unforgettable.Love.S01E19.Ripple.Effects.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/e73fc3fcd516ee61ee1e7c59ba3c1e64/Unforgettable.Love.S01E19.Ripple.Effects.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/c9c97721024cd6970054b87d1e9b716f/Unforgettable.Love.S01E19.Ripple.Effects.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            20: {
+                title: "Episode 20 - The Final Battle",
+                description: "The ultimate battle between good and evil takes place.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/a16ac39f8a96fb2c687434613fa0a7fe/Unforgettable.Love.S01E20.Family.Ties.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/9f7efe39c95e89d2b614b39e48374dcd/Unforgettable.Love.S01E20.Family.Ties.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/87b51f5b1bd610f76ce93014301cfd8b/Unforgettable.Love.S01E20.Family.Ties.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            21: {
+                title: "Episode 21 - The Aftermath",
+                description: "The aftermath of the final battle brings new challenges and revelations.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/8b528bc01b20c0bf8b7944d5548f2c99/Unforgettable.Love.S01E21.Near.Miss.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/c74947612d1c2b3dbf7abecb8aed879e/Unforgettable.Love.S01E21.Near.Miss.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/b2439ca3c94fdb37b835b20f8c7af75b/Unforgettable.Love.S01E21.Near.Miss.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            22: {
+                title: "Episode 22 - The New Threat",
+                description: "A new threat emerges, forcing the characters to unite once again.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/aa7897ded0a44d67748a68f52882db92/Unforgettable.Love.S01E22.Closer.Than.Ever.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/d7c86af94ea81de3522e90386bb40996/Unforgettable.Love.S01E22.Closer.Than.Ever.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/300e951405cd89bb8e9bbc9ebfea73f0/Unforgettable.Love.S01E22.Closer.Than.Ever.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            23: {
+                title: "Episode 23 - The Sacrifice",
+                description: "A character makes a heroic sacrifice to save others.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/eca290adf7d5789ff141c6a3f2130006/Unforgettable.Love.S01E23.Breaking.Barriers.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/7e51e020fdb81dda1322afe1c7302f1b/Unforgettable.Love.S01E23.Breaking.Barriers.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/a450d738d7f02d68a9a5ec2a3bab1c34/Unforgettable.Love.S01E23.Breaking.Barriers.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+            24: {
+                title: "Episode 24 - The Legacy",
+                description: "The legacy of the characters lives on as new stories begin.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/b607c655e06428185fb499a59fe15e07/Unforgettable.Love.S01E24.Happily.Ever.After.480P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/a28b5cce7bec9014f95ba9c4af4a1809/Unforgettable.Love.S01E24.Happily.Ever.After.720P.Hindi.Chinese.Esub.MoviesMod.farm.mkv",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/36a4340b3a6afe07f8528b117c12c11c/Unforgettable.Love.S01E24.Happily.Ever.After.1080P.Hindi.Chinese.Esub.MoviesMod.farm.mkv"
+                }
+            },
+
+        };
+
+        
+        let currentEpisode = 24; // Default to Episode 24
+        let currentQuality = '480p'; // Default quality
+        
+        function changeQuality(quality) {
+            currentQuality = quality;
+            
+            // Update video player
+            const episode = episodes[currentEpisode];
+            document.getElementById('videoSource').src = episode.videoUrls[quality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update active button
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-quality="${quality}"]`).classList.add('active');
+        }
+        
+        function loadEpisode(episodeNum) {
+            const episode = episodes[episodeNum];
+            if (!episode) return;
+            
+            currentEpisode = episodeNum;
+            
+            // Update video player
+            document.getElementById('videoSource').src = episode.videoUrls[currentQuality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update episode info
+            document.getElementById('episodeNumber').textContent = episodeNum;
+            document.getElementById('episodeTitle').textContent = episode.title.split(' - ')[1];
+            document.getElementById('episodeDescription').textContent = episode.description;
+            
+            // Update active button
+            document.querySelectorAll('.episode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-episode="${episodeNum}"]`).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function initializeEpisodes() {
+            const container = document.getElementById('episodesContainer');
+            
+            for (let i = 1; i <= 24; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'episode-btn' + (i === 24 ? ' active' : '');
+                btn.textContent = `Episode ${i}`;
+                btn.setAttribute('data-episode', i);
+                btn.onclick = () => loadEpisode(i);
+                container.appendChild(btn);
+            }
+            
+            // Initialize quality buttons
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.onclick = () => changeQuality(btn.getAttribute('data-quality'));
+            });
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeEpisodes();
+            loadEpisode(24); // Load Episode 24 by default
+        });
+    </script>
+</body>
+</html>
