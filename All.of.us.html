@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Of Us Are Dead - Video Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000000;
+            color: #525254;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        
+        .video-container {
+            background: #373636;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 0px 20px rgba(187, 187, 187, 0.5);
+        }
+        
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+        
+        .episode-info {
+            background: #353535;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+        
+        .episode-info h2 {
+            margin-bottom: 10px;
+            color: #929195;
+        }
+        
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .episode-btn {
+            padding: 12px 20px;
+            background: #3f3e3e;
+            border: 2px solid #a3a0a0;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1em;
+        }
+        
+        .episode-btn:hover {
+            background: #000000;
+            border-color: #5b5b5d;
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(167, 166, 166, 0.5);
+        }
+        
+        .episode-btn.active {
+            background: #000000;
+            border-color: #424141;
+            box-shadow: 0 0 15px rgba(167, 166, 166, 0.5);
+        }
+        
+        .quality-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .quality-btn {
+            padding: 10px 15px;
+            background: #373636;
+            border: 2px solid #363636;
+            color: #f7f7ff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+            margin: 0 5px;
+        }
+        
+        .quality-btn:hover {
+            background: #000000;
+            border-color: #000000;
+            transform: translateY(-2px);
+        }
+        
+        .quality-btn.active {
+            background: #000000;
+            border-color: #464545;
+            box-shadow: 0 0 15px rgba(249, 245, 245, 0.5);
+        }
+        
+        .description {
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>All Of Us Are Dead S1</h1>
+            <p>K Series | Watch All Episodes</p>
+        </div>
+        
+        <div class="video-container">
+            <video class="video-player" id="videoPlayer" controls>
+                <source id="videoSource" src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="quality-container">
+            <h3>Select Quality:</h3>
+            <button class="quality-btn" data-quality="480p">480p</button>
+            <button class="quality-btn" data-quality="720p">720p</button>
+        </div>
+        
+        <div class="episode-info">
+            <h2>Episode <span id="episodeNumber">8</span></h2>
+        </div>
+        
+        <h3 style="margin-top: 40px; margin-bottom: 20px;">Select Episode:</h3>
+        <div class="episodes-grid" id="episodesContainer"></div>
+    </div>
+    
+    <script>
+         const episodes = {
+            1: {
+                title: "Episode 1 - The Beginning",
+                description: "Gun-woo puts his mother's safety first; Hong Woo-jin turns to an old friend for help; but Baek-jeong's men soon catch up after tailing their every move.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/916e702e9f1c176008b3dc04ee403b1e/All.Of.Us.Are.Dead.S01E01.480p.Hindi.English.Esubs.Moviesmod.Me.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/dd986f01d325093f0d702c4c27a4701c/All.Of.Us.Are.Dead.S01E01.720p.10Bit.Hindi.English.Korean.Esubs.Moviesmod.Me.mkv",
+                }
+            },
+            2: {
+                title: "Episode 2 - Secrets Unveiled",
+                description: "Hidden secrets start to surface as investigations deepen.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/84b864cd64772a1a9bbfa7c869a8a4c6/All.Of.Us.Are.Dead.S01E02.480p.Hindi.English.Esubs.Moviesmod.Me.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/128fe7c501420e53056fb8ac5f03009b/All.Of.Us.Are.Dead.S01E02.720p.10Bit.Hindi.English.Korean.Esubs.Moviesmod.Me.mkv",
+                    '1080p': ""
+                }
+            },
+            3: {
+                title: "Episode 3 - The Hunt",
+                description: "The search intensifies with new clues and suspects.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/bc63874ce2204032d93ce0b4896558ef/All.Of.Us.Are.Dead.S01E03.480p.Hindi.English.Esubs.Moviesmod.Me.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/ebd31972f3b2724de7deb2fbe2ac26a9/All.Of.Us.Are.Dead.S01E03.720p.10Bit.Hindi.English.Korean.Esubs.Moviesmod.Me.mkv",
+                    '1080p': ""
+                }
+            },
+            4: {
+                title: "Episode 4 - Betrayal",
+                description: "Trust is shattered as betrayal comes from an unexpected source.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/20fe1f6590615edb26b4bc96c937482a/All.Of.Us.Are.Dead.S01E04.480p.Hindi.English.Esubs.Moviesmod.Me.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/8f54378a12a96ed3f9c5f54a518de32c/All.Of.Us.Are.Dead.S01E04.720p.10Bit.Hindi.English.Korean.Esubs.Moviesmod.Me.mkv",
+                    '1080p': ""
+                }
+            },
+            5: {
+                title: "Episode 5 - Breakthrough",
+                description: "A major breakthrough brings new leads and complications.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/09386a4ee40dfd4a607c4e45b47aab9d/All.Of.Us.Are.Dead.S01E05.480p.Hindi.English.Esubs.Moviesmod.Me.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/cb5c4e9e27a96e60fd36224f76233718/All.Of.Us.Are.Dead.S01E05.720p.10Bit.Hindi.English.Korean.Esubs.Moviesmod.Me.mkv",
+                    '1080p': ""
+                }
+            },
+            6: {
+                title: "Episode 6 - The Trap",
+                description: "Our heroes fall into a dangerous trap set by the antagonist.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/a4f842a7e613913d9de853cb2963e255/All.Of.Us.Are.Dead.S01E06.480p.Hindi.English.Esubs.Moviesmod.Me.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/d99c44fe4b81c72d12b37102d2e96175/All.Of.Us.Are.Dead.S01E06.720p.10Bit.Hindi.English.Korean.Esubs.Moviesmod.Me.mkv",
+                    '1080p': ""
+                }
+            },
+            7: {
+                title: "Episode 7 - Escape",
+                description: "A daring escape attempt puts everything on the line.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/9c7ba26c230f6224a5fc1d9dd30eaebc/All.Of.Us.Are.Dead.S01E07.480p.Hindi.English.Esubs.Moviesmod.Me.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/2c10b2450b0575ec495cdc3022daa239/All.Of.Us.Are.Dead.S01E07.720p.10Bit.Hindi.English.Korean.Esubs.Moviesmod.Me.mkv",
+                    '1080p': ""
+                }
+            },
+             8: {
+                title: "Episode 8 - Revelation",
+                description: "Dark secrets are revealed, changing everything.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/623d390c1641ab67d10adadf9375c797/All.Of.Us.Are.Dead.S01E08.480p.Hindi.English.Esubs.Moviesmod.Me.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/124a0630b8cbac71cc29f2c3eb51191d/All.Of.Us.Are.Dead.S01E08.720p.10Bit.Hindi.English.Korean.Esubs.Moviesmod.Me.mkv",
+                    '1080p': ""
+                }
+            },
+            9: {
+                title: "Episode 9 - The Final Showdown",
+                description: "The ultimate confrontation unfolds with high stakes.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/4d241820eda23123eb4d91a12b5c531f/All.Of.Us.Are.Dead.S01E09.480p.Hindi.English.Esubs.Moviesmod.Me.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/a875684cf7b6ef3dfdffde3d6e57e6a4/All.Of.Us.Are.Dead.S01E09.720p.10Bit.Hindi.English.Korean.Esubs.Moviesmod.Me.mkv",
+                    '1080p': ""
+                }
+            },
+            10 : {
+                title: "Episode 10 - Aftermath",
+                description: "The aftermath of the showdown leaves lasting consequences.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/f534c7732489fdbec2da05b96d673fb0/All.Of.Us.Are.Dead.S01E10.480p.Hindi.English.Esubs.Moviesmod.Me.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/fec8161097dcea4105c69d8cb611c7a5/All.Of.Us.Are.Dead.S01E10.720p.10Bit.Hindi.English.Korean.Esubs.Moviesmod.Me.mkv",
+                    '1080p': ""
+                }
+            },
+            11: {
+                title: "Episode 11 - New Beginnings",
+                description: "New paths are forged as the story continues.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/7832be379c18af6d4961dcc6f1ba47da/All.Of.Us.Are.Dead.S01E11.480p.Hindi.English.Esubs.Moviesmod.Me.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/168425f4034dbdc073694002af5af916/All.Of.Us.Are.Dead.S01E11.720p.10Bit.Hindi.English.Korean.Esubs.Moviesmod.Me.mkv",
+                    '1080p': ""
+                }
+            },
+            12: {
+                title: "Episode 12 - The Future",
+                description: "The future holds new challenges and opportunities for our characters.",
+                videoUrls: {
+                    '480p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/6212b3226021e8193bdcbcbbf01a726f/All.Of.Us.Are.Dead.S01E12.480p.Hindi.English.Esubs.Moviesmod.Me.mkv",
+                    '720p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/3041a0753c44de3189c4a4279ce1cf89/All.Of.Us.Are.Dead.S01E12.720p.10Bit.Hindi.English.Korean.Esubs.Moviesmod.Me.mkv",
+                    '1080p': ""
+                }
+            },
+
+        };
+
+        
+        let currentEpisode = 12; // Default to Episode 12
+        let currentQuality = '480p'; // Default quality
+        
+        function changeQuality(quality) {
+            currentQuality = quality;
+            
+            // Update video player
+            const episode = episodes[currentEpisode];
+            document.getElementById('videoSource').src = episode.videoUrls[quality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update active button
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-quality="${quality}"]`).classList.add('active');
+        }
+        
+        function loadEpisode(episodeNum) {
+            const episode = episodes[episodeNum];
+            if (!episode) return;
+            
+            currentEpisode = episodeNum;
+            
+            // Update video player
+            document.getElementById('videoSource').src = episode.videoUrls[currentQuality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update episode info
+            document.getElementById('episodeNumber').textContent = episodeNum;
+            document.getElementById('episodeTitle').textContent = episode.title.split(' - ')[1];
+            document.getElementById('episodeDescription').textContent = episode.description;
+            
+            // Update active button
+            document.querySelectorAll('.episode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-episode="${episodeNum}"]`).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function initializeEpisodes() {
+            const container = document.getElementById('episodesContainer');
+            
+            for (let i = 1; i <= 12; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'episode-btn' + (i === 12 ? ' active' : '');
+                btn.textContent = `Episode ${i}`;
+                btn.setAttribute('data-episode', i);
+                btn.onclick = () => loadEpisode(i);
+                container.appendChild(btn);
+            }
+            
+            // Initialize quality buttons
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.onclick = () => changeQuality(btn.getAttribute('data-quality'));
+            });
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeEpisodes();
+            loadEpisode(12); // Load Episode 12 by default
+        });
+    </script>
+</body>
+</html>
