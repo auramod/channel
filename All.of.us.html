@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Of Us Are Dead - Drama Video Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000000;
+            color: #525254;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        
+        .video-container {
+            background: #373636;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 0px 20px rgba(187, 187, 187, 0.5);
+        }
+        
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+        
+        .episode-info {
+            background: #353535;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+        
+        .episode-info h2 {
+            margin-bottom: 10px;
+            color: #929195;
+        }
+        
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .episode-btn {
+            padding: 12px 20px;
+            background: #3f3e3e;
+            border: 2px solid #a3a0a0;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1em;
+        }
+        
+        .episode-btn:hover {
+            background: #000000;
+            border-color: #5b5b5d;
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(167, 166, 166, 0.5);
+        }
+        
+        .episode-btn.active {
+            background: #000000;
+            border-color: #424141;
+            box-shadow: 0 0 15px rgba(167, 166, 166, 0.5);
+        }
+        
+        .quality-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .quality-btn {
+            padding: 10px 15px;
+            background: #373636;
+            border: 2px solid #363636;
+            color: #f7f7ff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+            margin: 0 5px;
+        }
+        
+        .quality-btn:hover {
+            background: #000000;
+            border-color: #000000;
+            transform: translateY(-2px);
+        }
+        
+        .quality-btn.active {
+            background: #000000;
+            border-color: #464545;
+            box-shadow: 0 0 15px rgba(249, 245, 245, 0.5);
+        }
+        
+        .description {
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>All Of Us Are Dead</h1>
+            <p>Drama Series | Watch All Episodes</p>
+        </div>
+        
+        <div class="video-container">
+            <video class="video-player" id="videoPlayer" controls>
+                <source id="videoSource" src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="quality-container">
+            <h3>Select Quality:</h3>
+            <button class="quality-btn" data-quality="480p">480p</button>
+            <button class="quality-btn" data-quality="720p">720p</button>
+            <button class="quality-btn" data-quality="1080p">1080p</button>
+        </div>
+        
+        <div class="episode-info">
+            <h2>Episode <span id="episodeNumber">12</span></h2>
+        </div>
+        
+        <h3 style="margin-top: 40px; margin-bottom: 20px;">Select Episode:</h3>
+        <div class="episodes-grid" id="episodesContainer"></div>
+    </div>
+    
+    <script>
+         const episodes = {
+            1: {
+                title: "Episode 1 - The Beginning",
+                description: "Gun-woo puts his mother's safety first; Hong Woo-jin turns to an old friend for help; but Baek-jeong's men soon catch up after tailing their every move.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/99661?hash=AgADiB&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/99726?hash=AgADAR&chat=-1001887512620",
+                    '1080p': "https://watch.gkbotz.qzz.io/dl/99770?hash=AgADYB&chat=-1001887512620"
+                }
+            },
+            2: {
+                title: "Episode 2 - Secrets Unveiled",
+                description: "Hidden secrets start to surface as investigations deepen.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/99662?hash=AgADih&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/99727?hash=AgADAh&chat=-1001887512620",
+                    '1080p': "https://watch.gkbotz.qzz.io/dl/99771?hash=AgADYh&chat=-1001887512620"
+                }
+            },
+            3: {
+                title: "Episode 3 - The Hunt",
+                description: "The search intensifies with new clues and suspects.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/99663?hash=AgADjB&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/99728?hash=AgADCB&chat=-1001887512620",
+                    '1080p': "https://watch.gkbotz.qzz.io/dl/99772?hash=AgADZB&chat=-1001887512620"
+                }
+            },
+            4: {
+                title: "Episode 4 - Betrayal",
+                description: "Trust is shattered as betrayal comes from an unexpected source.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/99664?hash=AgADjx&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/99729?hash=AgADDx&chat=-1001887512620",
+                    '1080p': "https://watch.gkbotz.qzz.io/dl/99773?hash=AgADZR&chat=-1001887512620"
+                }
+            },
+            5: {
+                title: "Episode 5 - Breakthrough",
+                description: "A major breakthrough brings new leads and complications.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/99665?hash=AgADkB&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/99730?hash=AgADER&chat=-1001887512620",
+                    '1080p': "https://watch.gkbotz.qzz.io/dl/99774?hash=AgADZh&chat=-1001887512620"
+                }
+            },
+            6: {
+                title: "Episode 6 - The Trap",
+                description: "Our heroes fall into a dangerous trap set by the antagonist.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/99666?hash=AgADkh&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/99731?hash=AgADFB&chat=-1001887512620",
+                    '1080p': "https://watch.gkbotz.qzz.io/dl/99775?hash=AgADZx&chat=-1001887512620"
+                }
+            },
+            7: {
+                title: "Episode 7 - Escape",
+                description: "A daring escape attempt puts everything on the line.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/99667?hash=AgADkx&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/99732?hash=AgADFR&chat=-1001887512620",
+                    '1080p': "https://watch.gkbotz.qzz.io/dl/99776?hash=AgADaR&chat=-1001887512620"
+                }
+            },
+             8: {
+                title: "Episode 8 - Revelation",
+                description: "Dark secrets are revealed, changing everything.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/99668?hash=AgADlh&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/99733?hash=AgADFh&chat=-1001887512620",
+                    '1080p': "https://watch.gkbotz.qzz.io/dl/99777?hash=AgADbB&chat=-1001887512620"
+                }
+            },
+            9: {
+                title: "Episode 9 - Confrontation",
+                description: "The final confrontation between good and evil unfolds.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/99669?hash=AgADmB&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/99734?hash=AgADGB&chat=-1001887512620",
+                    '1080p': "https://watch.gkbotz.qzz.io/dl/99778?hash=AgADbR&chat=-1001887512620"
+                }
+            },
+            10: {
+                title: "Episode 10 - The Endgame",
+                description: "The thrilling conclusion to the series.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/99670?hash=AgADmR&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/99735?hash=AgADGh&chat=-1001887512620",
+                    '1080p': "https://watch.gkbotz.qzz.io/dl/99779?hash=AgADcB&chat=-1001887512620"
+                }
+            },
+            11: {
+                title: "Episode 11 - New Beginnings",
+                description: "A new chapter begins with unexpected twists.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/99671?hash=AgADmh&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/99736?hash=AgADHB&chat=-1001887512620",
+                    '1080p': "https://watch.gkbotz.qzz.io/dl/99780?hash=AgADcR&chat=-1001887512620"
+                }
+            },
+            12: {
+                title: "Episode 12 - The Aftermath",
+                description: "The aftermath of the final battle brings new challenges.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/99672?hash=AgADmx&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/99737?hash=AgADHR&chat=-1001887512620",
+                    '1080p': "https://watch.gkbotz.qzz.io/dl/99781?hash=AgADch&chat=-1001887512620"
+                }
+            },
+
+        };
+
+        
+        let currentEpisode = 12; // Default to Episode 12
+        let currentQuality = '480p'; // Default quality
+        
+        function changeQuality(quality) {
+            currentQuality = quality;
+            
+            // Update video player
+            const episode = episodes[currentEpisode];
+            document.getElementById('videoSource').src = episode.videoUrls[quality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update active button
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-quality="${quality}"]`).classList.add('active');
+        }
+        
+        function loadEpisode(episodeNum) {
+            const episode = episodes[episodeNum];
+            if (!episode) return;
+            
+            currentEpisode = episodeNum;
+            
+            // Update video player
+            document.getElementById('videoSource').src = episode.videoUrls[currentQuality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update episode info
+            document.getElementById('episodeNumber').textContent = episodeNum;
+            document.getElementById('episodeTitle').textContent = episode.title.split(' - ')[1];
+            document.getElementById('episodeDescription').textContent = episode.description;
+            
+            // Update active button
+            document.querySelectorAll('.episode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-episode="${episodeNum}"]`).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function initializeEpisodes() {
+            const container = document.getElementById('episodesContainer');
+            
+            for (let i = 1; i <= 12; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'episode-btn' + (i === 13 ? ' active' : '');
+                btn.textContent = `Episode ${i}`;
+                btn.setAttribute('data-episode', i);
+                btn.onclick = () => loadEpisode(i);
+                container.appendChild(btn);
+            }
+            
+            // Initialize quality buttons
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.onclick = () => changeQuality(btn.getAttribute('data-quality'));
+            });
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeEpisodes();
+            loadEpisode(12); // Load Episode 12 by default
+        });
+    </script>
+</body>
+</html>
