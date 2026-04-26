@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tale Of The Nine Tailed - Drama Video Player</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000000;
+            color: #525254;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        
+        .video-container {
+            background: #373636;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+            box-shadow: 0 0px 20px rgba(187, 187, 187, 0.5);
+        }
+        
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+        }
+        
+        .episode-info {
+            background: #353535;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+        
+        .episode-info h2 {
+            margin-bottom: 10px;
+            color: #929195;
+        }
+        
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .episode-btn {
+            padding: 12px 20px;
+            background: #3f3e3e;
+            border: 2px solid #a3a0a0;
+            color: #ffffff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 1em;
+        }
+        
+        .episode-btn:hover {
+            background: #000000;
+            border-color: #5b5b5d;
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(167, 166, 166, 0.5);
+        }
+        
+        .episode-btn.active {
+            background: #000000;
+            border-color: #424141;
+            box-shadow: 0 0 15px rgba(167, 166, 166, 0.5);
+        }
+        
+        .quality-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .quality-btn {
+            padding: 10px 15px;
+            background: #373636;
+            border: 2px solid #363636;
+            color: #f7f7ff;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.9em;
+            margin: 0 5px;
+        }
+        
+        .quality-btn:hover {
+            background: #000000;
+            border-color: #000000;
+            transform: translateY(-2px);
+        }
+        
+        .quality-btn.active {
+            background: #000000;
+            border-color: #464545;
+            box-shadow: 0 0 15px rgba(249, 245, 245, 0.5);
+        }
+        
+        .description {
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            line-height: 1.6;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Tale Of The Nine Tailed</h1>
+            <p>Drama Series | Watch All Episodes</p>
+        </div>
+        
+        <div class="video-container">
+            <video class="video-player" id="videoPlayer" controls>
+                <source id="videoSource" src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="quality-container">
+            <h3>Select Quality:</h3>
+            <button class="quality-btn" data-quality="480p">480p</button>
+            <button class="quality-btn" data-quality="720p">720p</button>
+        </div>
+        
+        <div class="episode-info">
+            <h2>Episode <span id="episodeNumber">20</span>
+        </div>
+        
+        <h3 style="margin-top: 40px; margin-bottom: 20px;">Select Episode:</h3>
+        <div class="episodes-grid" id="episodesContainer"></div>
+    </div>
+    
+    <script>
+         const episodes = {
+            1: {
+                title: "Episode 1 - The Beginning",
+                description: "Gun-woo puts his mother's safety first; Hong Woo-jin turns to an old friend for help; but Baek-jeong's men soon catch up after tailing their every move.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185358?hash=AgAD2B&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185394?hash=AgADEx&chat=-1001887512620",
+                    '1080p': "https://watch.gkbotz.qzz.io/dl/185376?hash=AgAD1R&chat=-1001887512620"
+                }
+            },
+            2: {
+                title: "Episode 2 - Secrets Unveiled",
+                description: "Hidden secrets start to surface as investigations deepen.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185359?hash=AgAD2R&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185395?hash=AgADFB&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/a77689610a0da851ac54fc38e39f5435/Tale.Of.The.Nine.Tailed.S01E02.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            3: {
+                title: "Episode 3 - The Hunt",
+                description: "The search intensifies with new clues and suspects.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185360?hash=AgAD3B&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185396?hash=AgADFh&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/baa04b5979a24c4cc606cde2d855aac4/Vincenzo.S01E03.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            4: {
+                title: "Episode 4 - Betrayal",
+                description: "Trust is shattered as betrayal comes from an unexpected source.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185361?hash=AgAD3h&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185397?hash=AgADFx&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/b6af7c310f3e4abb421f0f868214329e/Vincenzo.S01E04.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            5: {
+                title: "Episode 5 - Breakthrough",
+                description: "A major breakthrough brings new leads and complications.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185362?hash=AgAD4R&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185398?hash=AgADGB&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/e036db35205801a6b8e1c8d0940f4b17/Vincenzo.S01E05.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            6: {
+                title: "Episode 6 - The Trap",
+                description: "Our heroes fall into a dangerous trap set by the antagonist.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185363?hash=AgAD4x&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185399?hash=AgADGR&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/8ccd8ea0308887a70cb4c5fa9735b051/Vincenzo.S01E06.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            7: {
+                title: "Episode 7 - Escape",
+                description: "A daring escape attempt puts everything on the line.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185364?hash=AgAD5B&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185400?hash=AgADGx&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/0d0a613c97522946a3ec814db6d7f170/Vincenzo.S01E07.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+             8: {
+                title: "Episode 8 - Revelation",
+                description: "Dark secrets are revealed, changing everything.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185365?hash=AgAD5h&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185401?hash=AgADHR&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/9c13b9e9057f6fcd063a65fd4c71fedf/Vincenzo.S01E08.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            9: {
+                title: "Episode 9 - Confrontation",
+                description: "The final confrontation between good and evil unfolds.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185366?hash=AgAD5x&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185402?hash=AgADHh&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/9626c17cf09ce560eddcc7a01436c9db/Vincenzo.S01E09.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            10: {
+                title: "Episode 10 - The Endgame",
+                description: "The thrilling conclusion to the series.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185367?hash=AgAD6R&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185403?hash=AgADHx&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/6b2cfe9fa1a87f3326836951e2f447f3/Vincenzo.S01E10.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            11: {
+                title: "Episode 11 - New Beginnings",
+                description: "A new chapter begins with unexpected twists.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185368?hash=AgAD6h&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185404?hash=AgADIR&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/dafa6a2cb3a0c267ff54a144be99f787/Vincenzo.S01E11.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            12: {
+                title: "Episode 12 - The Aftermath",
+                description: "The aftermath of the final battle brings new challenges.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185369?hash=AgAD7B&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185405?hash=AgADIh&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/cecd09f5804ed8ac4b647fbc33348743/Vincenzo.S01E12.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            13: {
+                title: "Episode 13 - Redemption",
+                description: "Characters seek redemption for past actions.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185370?hash=AgAD7x&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185406?hash=AgADIx&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/1655227858d11beec368aaa91b3ad0d7/Vincenzo.S01E13.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            14: {
+                title: "Episode 14 - The Return",
+                description: "A character returns with a shocking revelation.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185371?hash=AgAD8B&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185407?hash=AgADJB&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/9ff73d50dbd7d50619ad18bb4ea15f42/Vincenzo.S01E14.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            15: {
+                title: "Episode 15 - The Secret",
+                description: "A long-hidden secret is finally uncovered.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185372?hash=AgAD8R&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185408?hash=AgADJR&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/06f067c637bedfe022379a023185a7f4/Vincenzo.S01E15.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+            16: {
+                title: "Episode 16 - The Chase",
+                description: "A high-stakes chase through the city ensues.",
+                videoUrls: {
+                    '480p': "https://watch.gkbotz.qzz.io/dl/185373?hash=AgAD8x&chat=-1001887512620",
+                    '720p': "https://watch.gkbotz.qzz.io/dl/185409?hash=AgADJx&chat=-1001887512620",
+                    '1080p': "https://pub-615cf17c31c4422aa4747a5f6bbb9aa2.r2.dev/c9da56dee4cd4c8c731d742a56d82151/Vincenzo.S01E16.1080p.x264.Hindi.English.Korean.Esubs.MoviesMod.org.mkv"
+                }
+            },
+
+        };
+
+        
+        let currentEpisode = 16; // Default to Episode 16
+        let currentQuality = '480p'; // Default quality
+        
+        function changeQuality(quality) {
+            currentQuality = quality;
+            
+            // Update video player
+            const episode = episodes[currentEpisode];
+            document.getElementById('videoSource').src = episode.videoUrls[quality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update active button
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-quality="${quality}"]`).classList.add('active');
+        }
+        
+        function loadEpisode(episodeNum) {
+            const episode = episodes[episodeNum];
+            if (!episode) return;
+            
+            currentEpisode = episodeNum;
+            
+            // Update video player
+            document.getElementById('videoSource').src = episode.videoUrls[currentQuality];
+            document.getElementById('videoPlayer').load();
+            
+            // Update episode info
+            document.getElementById('episodeNumber').textContent = episodeNum;
+            document.getElementById('episodeTitle').textContent = episode.title.split(' - ')[1];
+            document.getElementById('episodeDescription').textContent = episode.description;
+            
+            // Update active button
+            document.querySelectorAll('.episode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-episode="${episodeNum}"]`).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        function initializeEpisodes() {
+            const container = document.getElementById('episodesContainer');
+            
+            for (let i = 1; i <= 16; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'episode-btn' + (i === 17 ? ' active' : '');
+                btn.textContent = `Episode ${i}`;
+                btn.setAttribute('data-episode', i);
+                btn.onclick = () => loadEpisode(i);
+                container.appendChild(btn);
+            }
+            
+            // Initialize quality buttons
+            document.querySelectorAll('.quality-btn').forEach(btn => {
+                btn.onclick = () => changeQuality(btn.getAttribute('data-quality'));
+            });
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeEpisodes();
+            loadEpisode(16); // Load Episode 16 by default
+        });
+    </script>
+</body>
+</html>
